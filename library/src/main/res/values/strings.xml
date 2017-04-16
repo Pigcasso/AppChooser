@@ -1,0 +1,26 @@
+<resources>
+
+    <string name="app_name">App Chooser</string>
+
+    <string name="resolvers_set_as_the_default_app">Set as the default app</string>
+    <string name="resolvers_title">Select</string>
+
+    <string name="media_types_title">Open with</string>
+
+    <string-array name="media_types_mime_types">
+        <item>text/*</item>
+        <item>audio/*</item>
+        <item>video/*</item>
+        <item>image/*</item>
+        <item>*/*</item>
+    </string-array>
+
+    <string-array name="media_types_display_names">
+        <item>Text</item>
+        <item>Audio</item>
+        <item>Video</item>
+        <item>Image</item>
+        <item>Other</item>
+    </string-array>
+
+</resources>

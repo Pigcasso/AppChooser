@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">应用选择器</string>
+
+    <string name="resolvers_set_as_the_default_app">设置为默认应用</string>
+    <string name="resolvers_title">选择</string>
+
+    <string name="media_types_title">打开为</string>
+
+    <string-array name="media_types_display_names">
+        <item>文本</item>
+        <item>音频</item>
+        <item>视频</item>
+        <item>图片</item>
+        <item>其他</item>
+    </string-array>
+</resources>
