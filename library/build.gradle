@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -7,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -43,4 +44,13 @@ dependencies {
     compile deps.supportrecyclerview
     compile deps.zhybaservadapter
     compile deps.eventbus
+}
+
+publish {
+    userOrg = 'julianchu1989'
+    groupId = 'io.julian'
+    artifactId = 'appchooser'
+    publishVersion = '1.0.0'
+    desc = 'A library that filters the activities which supports to open the specified file.'
+    website = 'https://github.com/JulianAndroid/AppChooser'
 }
