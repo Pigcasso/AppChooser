@@ -59,7 +59,7 @@ public class AppChooserPresenterTest {
     }
 
     @Test
-    public void loadActivityInfo_throwsAppChooserException() throws Exception {
+    public void loadActivityInfo_throwsAppChooserExceptionAndShowMediaTypes() throws Exception {
         Mockito
                 .doAnswer(new Answer() {
                     @Override
@@ -72,9 +72,10 @@ public class AppChooserPresenterTest {
         AppChooserContract.Presenter presenter = getPresenter(null);
         returnValidActivityInfo();
 
-        presenter.loadActivityInfo(Mockito.anyString());
+        presenter.loadActivityInfo(AppChooserContract.DEFAULT_MIME_TYPE);
 
         verify(mMockActivityInfosRepository).deleteActivityInfo(Mockito.anyString());
+        verify(mMockView).showMediaTypes();
     }
 
     @Test
