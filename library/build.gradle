@@ -50,7 +50,7 @@ dependencies {
 }
 
 publish {
-    userOrg = 'julianchu1989'
+    userOrg = 'julianchu'
     groupId = 'io.julian'
     artifactId = 'appchooser'
     publishVersion = '1.0.0'
