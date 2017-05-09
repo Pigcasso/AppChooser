@@ -156,7 +156,6 @@ class AppChooserPresenter implements AppChooserContract.Presenter {
     public void loadResolver(Resolver resolver) {
         Subscription subscription = Observable
                 .just(resolver)
-                .observeOn(mSchedulerProvider.io())
                 .map(new Func1<Resolver, ActivityInfo>() {
                     @Override
                     public ActivityInfo call(Resolver resolver) {
@@ -167,7 +166,8 @@ class AppChooserPresenter implements AppChooserContract.Presenter {
                         return activityInfo;
                     }
                 })
-                .subscribeOn(mSchedulerProvider.ui())
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
                 .subscribe(new Action1<ActivityInfo>() {
                     @Override
                     public void call(ActivityInfo activityInfo) {
@@ -191,7 +191,7 @@ class AppChooserPresenter implements AppChooserContract.Presenter {
                         subscriber.onCompleted();
                     }
                 })
-                .observeOn(mSchedulerProvider.io())
+                .subscribeOn(mSchedulerProvider.io())
                 .subscribe();
     }
 
