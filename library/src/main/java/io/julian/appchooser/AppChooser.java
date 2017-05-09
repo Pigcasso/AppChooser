@@ -147,7 +147,9 @@ public class AppChooser implements AppChooserContract.View {
 
     public void unbind() {
         EventBus.getDefault().unregister(this);
-        mPresenter.unsubscribe();
+        if (mPresenter != null) {
+            mPresenter.unsubscribe();
+        }
     }
 
     interface DialogCompatImpl {
