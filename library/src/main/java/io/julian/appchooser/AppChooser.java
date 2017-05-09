@@ -77,9 +77,9 @@ public class AppChooser implements AppChooserContract.View {
 
     @Override
     public void showFileContent(ActivityInfo activityInfo, File file) throws AppChooserException {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setComponent(new ComponentName(activityInfo.getPkg(), activityInfo.getCls()));
-        intent.setData(Uri.fromFile(file));
+        intent.setDataAndType(Uri.fromFile(file), activityInfo.getMimeType());
         ComponentName componentName = intent.resolveActivity(mActivity.getPackageManager());
         if (componentName != null) {
             if (mRequestCode == AppChooserContract.DEFAULT_REQUEST_CODE) {

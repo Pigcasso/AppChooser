@@ -35,6 +35,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="openWordFile"
+        android:text="Open Word File"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="cleanTheDefaults"
         android:text="Clean the defaults"/>
 

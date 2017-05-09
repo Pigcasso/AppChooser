@@ -109,4 +109,9 @@ public class MainActivity extends AppCompatActivity {
         File download = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         mAppChooser.file(new File(download, "appchooser.txt")).requestCode(REQUEST_CODE).load();
     }
+
+    public void openWordFile(View view) {
+        File download = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        mAppChooser.file(new File(download, "就.docx")).requestCode(REQUEST_CODE).load();
+    }
 }
