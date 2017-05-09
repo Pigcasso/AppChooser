@@ -23,8 +23,8 @@ task clean(type: Delete) {
 }
 
 ext {
-    versionCode = 2
-    versionName = "1.0.1"
+    versionCode = 3
+    versionName = "1.0.2"
 }
 
 apply from: 'https://raw.githubusercontent.com/JulianAndroid/gradle-common-plugin/master/android-common-plugin.gradle'
