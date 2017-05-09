@@ -53,7 +53,7 @@ publish {
     userOrg = 'julianchu'
     groupId = 'io.julian'
     artifactId = 'appchooser'
-    publishVersion = '1.0.0'
+    publishVersion = rootProject.ext.versionName
     desc = 'A library that filters the activities which supports to open the specified file.'
     website = 'https://github.com/JulianAndroid/AppChooser'
 }
