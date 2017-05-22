@@ -9,6 +9,7 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.julian.appchooser.R;
 import io.julian.appchooser.data.MediaType;
 
 import static io.julian.appchooser.util.Preconditions.checkNotNull;
@@ -24,14 +25,14 @@ public class MediaTypesAdapter extends CommonAdapter<MediaType> {
     private OnMediaTypesListener mOnMediaTypesListener;
 
     public MediaTypesAdapter(Context context, OnMediaTypesListener onMediaTypesListener) {
-        super(context, android.R.layout.simple_list_item_1, new ArrayList<MediaType>());
+        super(context, R.layout.item_media_type, new ArrayList<MediaType>());
         mOnMediaTypesListener = checkNotNull(onMediaTypesListener);
     }
 
     @Override
     protected void convert(ViewHolder viewHolder, final MediaType item, int position) {
-        viewHolder.setText(android.R.id.text1, item.getDisplayName());
-        viewHolder.setOnClickListener(android.R.id.text1, new View.OnClickListener() {
+        viewHolder.setText(R.id.text_view_media_type_name, item.getDisplayName());
+        viewHolder.getConvertView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnMediaTypesListener.onMediaType(item);
