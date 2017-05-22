@@ -109,12 +109,12 @@ public class AppChooser implements AppChooserContract.View {
 
     @Override
     public void showFileContentError(File file) {
-        Toast.makeText(mActivity, "打开" + file + "失败！！", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, mActivity.getString(R.string.app_chooser_failed_to_open_file, file.getName()), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showNoResolvers(MediaType mediaType) {
-        Toast.makeText(mActivity, "没有找到能打开" + mediaType.getDisplayName() + "的应用", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, mActivity.getString(R.string.app_chooser_did_not_find_an_app_that_can_open_this_file, mediaType.getDisplayName()), Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -2,6 +2,9 @@
 
     <string name="app_name">App Chooser</string>
 
+    <string name="app_chooser_failed_to_open_file">Failed to open %s</string>
+    <string name="app_chooser_did_not_find_an_app_that_can_open_this_file">Did not find an application that can open %s</string>
+
     <string name="resolvers_set_as_the_default_app">Set as the default app</string>
     <string name="resolvers_title">Select</string>
 

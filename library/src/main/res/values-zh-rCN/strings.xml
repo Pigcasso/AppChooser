@@ -3,6 +3,9 @@
 
     <string name="app_name">应用选择器</string>
 
+    <string name="app_chooser_failed_to_open_file">%s 打开失败</string>
+    <string name="app_chooser_did_not_find_an_app_that_can_open_this_file">没有找到能打开%s的应用</string>
+
     <string name="resolvers_set_as_the_default_app">设置为默认应用</string>
     <string name="resolvers_title">选择</string>
 
