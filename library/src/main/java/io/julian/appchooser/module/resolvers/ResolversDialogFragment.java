@@ -7,11 +7,11 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.julian.appchooser.R;
 import io.julian.appchooser.data.Resolver;
 
 /**
@@ -50,7 +50,7 @@ public class ResolversDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getDialog().setTitle(R.string.resolvers_title);
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         return mDelegate.onCreateView(inflater, container, savedInstanceState);
     }
 

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -71,6 +72,7 @@ public class ResolversDelegate implements FragmentCallback, ResolversContract.Vi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewRoot = inflater.inflate(R.layout.dialog_resolvers, container, false);
+        ((TextView)mViewRoot.findViewById(R.id.alertTitle)).setText(R.string.resolvers_title);
         RecyclerView recyclerView = (RecyclerView) mViewRoot.findViewById(R.id.recycler_view_resolvers_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);

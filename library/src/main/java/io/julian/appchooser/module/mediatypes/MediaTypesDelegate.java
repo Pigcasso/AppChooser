@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -59,6 +60,7 @@ public class MediaTypesDelegate implements FragmentCallback, MediaTypesContract.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.dialog_media_types, container, false);
+        ((TextView)root.findViewById(R.id.alertTitle)).setText(R.string.media_types_title);
         RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recycler_view_media_types_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
