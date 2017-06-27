@@ -6,7 +6,7 @@
 
 ## 效果图
 
-![](http://upload-images.jianshu.io/upload_images/2275760-88d914b06eb4bbb6.gif?imageMogr2/auto-orient/strip)
+![](screenshots/Gif_20170624_154149.gif)
 
 ## 依赖
 
