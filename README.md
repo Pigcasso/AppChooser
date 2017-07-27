@@ -10,7 +10,12 @@
 
 ## 依赖
 
-`compile 'io.julian:appchooser:1.0.4'`
+`compile 'io.julian:appchooser:1.0.5'`
+
+## 1.0.5 特性
+
+修复bug：如果设置某个Activity为某类型文件的默认打开方式，然后将这个Activity所属的App卸载，再次点击这种类型的文件会导致App闪退。
+
 ## 使用方法
 
 在Activity或Fragment中：
