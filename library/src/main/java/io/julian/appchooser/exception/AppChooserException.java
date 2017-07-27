@@ -7,4 +7,11 @@ package io.julian.appchooser.exception;
  */
 
 public class AppChooserException extends Exception {
+
+    public AppChooserException() {
+    }
+
+    public AppChooserException(Throwable cause) {
+        super(cause);
+    }
 }

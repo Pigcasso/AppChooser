@@ -2,6 +2,7 @@ package io.julian.appchooser;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
@@ -82,10 +83,14 @@ public class AppChooser implements AppChooserContract.View {
         intent.setDataAndType(Uri.fromFile(file), activityInfo.getMimeType());
         ComponentName componentName = intent.resolveActivity(mActivity.getPackageManager());
         if (componentName != null) {
-            if (mRequestCode == AppChooserContract.DEFAULT_REQUEST_CODE) {
-                mActivity.startActivity(intent);
-            } else {
-                mActivity.startActivityForResult(intent, mRequestCode);
+            try {
+                if (mRequestCode == AppChooserContract.DEFAULT_REQUEST_CODE) {
+                    mActivity.startActivity(intent);
+                } else {
+                    mActivity.startActivityForResult(intent, mRequestCode);
+                }
+            } catch (ActivityNotFoundException e) {
+                throw new AppChooserException(e);
             }
         } else {
             throw new AppChooserException();
