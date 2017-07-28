@@ -2,7 +2,9 @@ package io.julian.appchooser.sample.module.fileinfos;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -35,12 +37,16 @@ public class FileInfosActivity extends AppCompatActivity {
 
         mAppChooser = AppChooser.with(this);
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+            } else {
+                showRootDirectory();
+            }
         } else {
             showRootDirectory();
         }
@@ -120,7 +126,7 @@ public class FileInfosActivity extends AppCompatActivity {
                 (FileInfosFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
         if (fragment == null) {
             // Create the fragment
-            fragment = FileInfosFragment.newInstance(FileConsts.ROOT);
+            fragment = FileInfosFragment.newInstance(Environment.getExternalStorageDirectory().getAbsolutePath());
             getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment)
                     .commit();
         }
