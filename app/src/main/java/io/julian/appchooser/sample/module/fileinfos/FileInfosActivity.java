@@ -3,6 +3,7 @@ package io.julian.appchooser.sample.module.fileinfos;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,7 +20,6 @@ import java.io.File;
 
 import io.julian.appchooser.AppChooser;
 import io.julian.appchooser.sample.R;
-import io.julian.appchooser.sample.constant.FileConsts;
 import io.julian.appchooser.sample.data.FileInfo;
 
 public class FileInfosActivity extends AppCompatActivity {
@@ -120,7 +120,7 @@ public class FileInfosActivity extends AppCompatActivity {
                 (FileInfosFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
         if (fragment == null) {
             // Create the fragment
-            fragment = FileInfosFragment.newInstance(FileConsts.ROOT);
+            fragment = FileInfosFragment.newInstance(Environment.getExternalStorageDirectory().getAbsolutePath());
             getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment)
                     .commit();
         }

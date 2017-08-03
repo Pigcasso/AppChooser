@@ -26,6 +26,7 @@ android {
     lintOptions {
         abortOnError false
     }
+    buildToolsVersion '25.0.0'
 }
 
 dependencies {
@@ -43,7 +44,6 @@ dependencies {
     compile deps.support
     compile deps.rxjava
     compile deps.rxandroid
-    compile deps.sqlbrite
     compile deps.supportrecyclerview
     compile deps.zhybaservadapter
     compile deps.eventbus
