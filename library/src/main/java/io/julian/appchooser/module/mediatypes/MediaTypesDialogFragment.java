@@ -1,12 +1,8 @@
 package io.julian.appchooser.module.mediatypes;
 
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 
 /**
  * @author Zhu Liang
@@ -40,11 +36,9 @@ public class MediaTypesDialogFragment extends DialogFragment {
         mDelegate.onDestroy();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        return mDelegate.onCreateView(inflater, container, savedInstanceState);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return mDelegate.onCreateDialog(savedInstanceState);
     }
 
     @Override

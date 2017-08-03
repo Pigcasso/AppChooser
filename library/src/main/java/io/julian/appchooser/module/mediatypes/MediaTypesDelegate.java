@@ -1,15 +1,15 @@
 package io.julian.appchooser.module.mediatypes;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -56,16 +56,17 @@ public class MediaTypesDelegate implements FragmentCallback, MediaTypesContract.
 
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.dialog_media_types, container, false);
-        ((TextView)root.findViewById(R.id.alertTitle)).setText(R.string.media_types_title);
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recycler_view_media_types_list);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_media_types, null);
+        RecyclerView recyclerView = (RecyclerView) contentView.findViewById(R.id.recycler_view_media_types_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mMediaTypesAdapter);
-        return root;
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        alertDialog.setTitle(R.string.media_types_title)
+                .setView(contentView);
+        return alertDialog.create();
     }
 
     @Override

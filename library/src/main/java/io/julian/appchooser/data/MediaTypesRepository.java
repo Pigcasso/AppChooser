@@ -43,10 +43,6 @@ public class MediaTypesRepository implements MediaTypesDataSource {
         return INSTANCE;
     }
 
-    public static void destroyInstance() {
-        INSTANCE = null;
-    }
-
     @Override
     public Observable<List<MediaType>> listMediaTypes() {
         if (mCachedMediaTypes != null) {

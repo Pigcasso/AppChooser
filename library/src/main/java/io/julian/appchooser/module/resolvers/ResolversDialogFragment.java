@@ -1,13 +1,10 @@
 package io.julian.appchooser.module.resolvers;
 
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +44,10 @@ public class ResolversDialogFragment extends DialogFragment {
         mDelegate.onDestroy();
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        return mDelegate.onCreateView(inflater, container, savedInstanceState);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return mDelegate.onCreateDialog(savedInstanceState);
     }
 
     @Override

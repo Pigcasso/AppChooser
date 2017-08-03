@@ -1,16 +1,16 @@
 package io.julian.appchooser.module.resolvers;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -68,17 +68,17 @@ public class ResolversDelegate implements FragmentCallback, ResolversContract.Vi
         mContext = null;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewRoot = inflater.inflate(R.layout.dialog_resolvers, container, false);
-        ((TextView)mViewRoot.findViewById(R.id.alertTitle)).setText(R.string.resolvers_title);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        mViewRoot = LayoutInflater.from(mContext).inflate(R.layout.dialog_resolvers, null);
         RecyclerView recyclerView = (RecyclerView) mViewRoot.findViewById(R.id.recycler_view_resolvers_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mAdapter);
-        return mViewRoot;
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        alertDialog.setTitle(R.string.resolvers_title).setView(mViewRoot);
+        return alertDialog.create();
     }
 
     @Override
