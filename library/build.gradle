@@ -26,7 +26,6 @@ android {
     lintOptions {
         abortOnError false
     }
-    buildToolsVersion '25.0.0'
 }
 
 dependencies {
@@ -47,6 +46,8 @@ dependencies {
     compile deps.supportrecyclerview
     compile deps.zhybaservadapter
     compile deps.eventbus
+    compile deps.juliancommon
+    compile deps.julianmvp
 }
 
 publish {

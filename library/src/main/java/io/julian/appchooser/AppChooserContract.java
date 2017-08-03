@@ -7,8 +7,8 @@ import io.julian.appchooser.data.ActivityInfo;
 import io.julian.appchooser.data.MediaType;
 import io.julian.appchooser.data.Resolver;
 import io.julian.appchooser.exception.AppChooserException;
-import io.julian.appchooser.module.base.BasePresenter;
-import io.julian.appchooser.module.base.BaseView;
+import io.julian.mvp.BasePresenter;
+import io.julian.mvp.BaseView;
 
 /**
  * @author Zhu Liang
