@@ -4,6 +4,9 @@
 ## 起因
 我司主营企业版云存储服务，在一段时间里经常有用户反馈点击某个文件会自动跳转到手机系统自带APP（大多是音乐播放器）的问题。结果发现是手机厂商Rom修改了底层逻辑导致的，为了绕过这个bug，只能在应用内自己实现选择器。
 
+## 下载
+[Download latest release](https://github.com/JulianAndroid/AppChooser/releases/tag/v1.0.6)
+
 ## 效果图
 
 ![](screenshots/Gif_20170624_154149.gif)
