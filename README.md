@@ -12,6 +12,9 @@
 
 `compile 'io.julian:appchooser:1.0.6'`
 
+## 1.1.0 特性
+- 允许屏蔽掉制定的 Component 作为选择项。
+
 ## 1.0.6 特性
 
 把我写的另外两个库：`common-1.0.9` , `mvp-1.0.7` 引入 `appchooser` 中。
