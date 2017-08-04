@@ -13,7 +13,7 @@
 
 ## 依赖
 
-`compile 'io.julian:appchooser:1.0.6'`
+`compile 'io.julian:appchooser:1.1.0'`
 
 ## 1.1.0 特性
 - 允许屏蔽掉制定的 Component 作为选择项。
