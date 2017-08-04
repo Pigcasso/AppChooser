@@ -19,6 +19,9 @@ public class MimeTypeUtils {
     public static String getMimeType(File file) {
         String extension;
         extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
+        if (extension != null) {
+            extension = extension.toLowerCase();
+        }
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
     }
 }
