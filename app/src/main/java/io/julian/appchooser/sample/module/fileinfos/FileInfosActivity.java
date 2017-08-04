@@ -1,6 +1,7 @@
 package io.julian.appchooser.sample.module.fileinfos;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,13 +29,18 @@ public class FileInfosActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 110;
     private AppChooser mAppChooser;
 
+    ComponentName[] excluded = new ComponentName[]{
+            new ComponentName("nutstore.android", "nutstore.android.SendToNutstoreIndex"),
+            new ComponentName("nutstore.android.debug", "nutstore.android.SendToNutstoreIndex"),
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_file_infos);
 
-        mAppChooser = AppChooser.with(this);
+        mAppChooser = AppChooser.with(this).excluded(excluded);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,

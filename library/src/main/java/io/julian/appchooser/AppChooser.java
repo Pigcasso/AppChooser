@@ -15,6 +15,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import io.julian.appchooser.data.ActivityInfo;
@@ -40,6 +41,7 @@ public class AppChooser implements AppChooserContract.View {
     private Activity mActivity;
     private File mFile;
     private int mRequestCode;
+    private List<ComponentName> mExcluded;
     private AppChooserContract.Presenter mPresenter;
     private DialogCompatImpl mDialogCompat;
 
@@ -66,13 +68,30 @@ public class AppChooser implements AppChooserContract.View {
         return this;
     }
 
+    public AppChooser excluded(ComponentName... componentNames) {
+        if (componentNames != null) {
+            mExcluded = Arrays.asList(componentNames);
+        }
+        return this;
+    }
+
     public void load() {
-        mPresenter = new AppChooserPresenter(this,
-                Injection.provideSchedulerProvider(),
-                mFile,
-                MimeTypeUtils.getMimeType(mFile),
-                Injection.provideActivityInfosRepository(mActivity),
-                Injection.providerResolversRepository(mActivity));
+        if (mExcluded == null || mExcluded.size() == 0) {
+            mPresenter = new AppChooserPresenter(this,
+                    Injection.provideSchedulerProvider(),
+                    mFile,
+                    MimeTypeUtils.getMimeType(mFile),
+                    Injection.provideActivityInfosRepository(mActivity),
+                    Injection.providerResolversRepository(mActivity));
+        } else {
+            mPresenter = new AppChooserPresenter(this,
+                    Injection.provideSchedulerProvider(),
+                    mFile,
+                    MimeTypeUtils.getMimeType(mFile),
+                    mExcluded,
+                    Injection.provideActivityInfosRepository(mActivity),
+                    Injection.providerResolversRepository(mActivity));
+        }
         mPresenter.subscribe();
     }
 

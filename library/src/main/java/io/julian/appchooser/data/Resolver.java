@@ -1,5 +1,6 @@
 package io.julian.appchooser.data;
 
+import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
@@ -59,6 +60,12 @@ public class Resolver implements Parcelable {
         checkNotNull(mimeType);
         return new ActivityInfo(mimeType,
                 mResolveInfo.activityInfo.packageName,
+                mResolveInfo.activityInfo.name);
+    }
+
+    @NonNull
+    public ComponentName loadComponentName() {
+        return new ComponentName(mResolveInfo.activityInfo.packageName,
                 mResolveInfo.activityInfo.name);
     }
 

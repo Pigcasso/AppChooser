@@ -45,7 +45,7 @@ public class ResolversRepositoryTest {
                 packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
 
         for (ResolveInfo resolver : resolvers) {
-            Log.d(TAG, resolver.activityInfo.name);
+            Log.d(TAG, resolver.activityInfo.packageName + "\n" + resolver.activityInfo.name);
         }
     }
 

@@ -1,7 +1,9 @@
 package io.julian.appchooser;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import java.io.File;
 import java.util.List;
@@ -13,6 +15,7 @@ import io.julian.appchooser.data.Resolver;
 import io.julian.appchooser.data.ResolversRepository;
 import io.julian.appchooser.exception.AppChooserException;
 import io.julian.appchooser.util.schedulers.BaseSchedulerProvider;
+import io.julian.common.Preconditions;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -30,6 +33,7 @@ class AppChooserPresenter implements AppChooserContract.Presenter {
     private AppChooserContract.View mView;
     private File mFile;
     private String mRealMimeType;
+    private List<ComponentName> mExcluded;
     private ActivityInfosRepository mActivityInfosRepository;
     private ResolversRepository mResolversRepository;
     private BaseSchedulerProvider mSchedulerProvider;
@@ -41,12 +45,24 @@ class AppChooserPresenter implements AppChooserContract.Presenter {
                         String mimeType,
                         ActivityInfosRepository activityInfosRepository,
                         ResolversRepository resolversRepository) {
+        this(view, schedulerProvider, file, mimeType, null, activityInfosRepository,
+                resolversRepository);
+    }
+
+    AppChooserPresenter(AppChooserContract.View view,
+                        BaseSchedulerProvider schedulerProvider,
+                        File file,
+                        String mimeType,
+                        List<ComponentName> excluded,
+                        ActivityInfosRepository activityInfosRepository,
+                        ResolversRepository resolversRepository) {
         mView = view;
         mSchedulerProvider = schedulerProvider;
         mFile = file;
         mActivityInfosRepository = activityInfosRepository;
         mResolversRepository = resolversRepository;
         mRealMimeType = mimeType == null ? AppChooserContract.DEFAULT_MIME_TYPE : mimeType;
+        mExcluded = excluded;
     }
 
     AppChooserPresenter(BaseSchedulerProvider schedulerProvider,
@@ -69,6 +85,16 @@ class AppChooserPresenter implements AppChooserContract.Presenter {
     public void loadActivityInfo(final String mimeType) {
         Subscription subscription = mActivityInfosRepository
                 .getActivityInfo(mimeType)
+                .map(new Func1<ActivityInfo, ActivityInfo>() {
+                    @Override
+                    public ActivityInfo call(ActivityInfo activityInfo) {
+                        if (activityInfo != null && containsInExcluded(activityInfo)) {
+                            mActivityInfosRepository.deleteActivityInfo(mimeType);
+                            return null;
+                        }
+                        return activityInfo;
+                    }
+                })
                 .subscribe(new Action1<ActivityInfo>() {
                     @Override
                     public void call(ActivityInfo activityInfo) {
@@ -92,16 +118,7 @@ class AppChooserPresenter implements AppChooserContract.Presenter {
 
     @Override
     public void loadResolvers(final String mimeType) {
-        Subscription subscription = Observable
-                .just((Void) null)
-                .flatMap(new Func1<Void, Observable<List<Resolver>>>() {
-                    @Override
-                    public Observable<List<Resolver>> call(Void aVoid) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(mFile), mimeType);
-                        return mResolversRepository.listResolvers(intent);
-                    }
-                })
+        Subscription subscription = loadResolversInternal(mimeType)
                 .subscribe(new Action1<List<Resolver>>() {
                     @Override
                     public void call(List<Resolver> resolvers) {
@@ -123,16 +140,7 @@ class AppChooserPresenter implements AppChooserContract.Presenter {
 
     @Override
     public void loadResolvers(final MediaType mediaType) {
-        Subscription subscription = Observable
-                .just((Void) null)
-                .flatMap(new Func1<Void, Observable<List<Resolver>>>() {
-                    @Override
-                    public Observable<List<Resolver>> call(Void aVoid) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.fromFile(mFile), mediaType.getMimeType());
-                        return mResolversRepository.listResolvers(intent);
-                    }
-                })
+        Subscription subscription = loadResolversInternal(mediaType.getMimeType())
                 .subscribe(new Action1<List<Resolver>>() {
                     @Override
                     public void call(List<Resolver> resolvers) {
@@ -197,5 +205,70 @@ class AppChooserPresenter implements AppChooserContract.Presenter {
 
     private void loadActivityInfo() {
         loadActivityInfo(mRealMimeType);
+    }
+
+    private Observable<List<Resolver>> loadResolversInternal(final String mimeType) {
+        return Observable
+                .just((Void) null)
+                .flatMap(new Func1<Void, Observable<List<Resolver>>>() {
+                    @Override
+                    public Observable<List<Resolver>> call(Void aVoid) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.fromFile(mFile), mimeType);
+                        return mResolversRepository.listResolvers(intent);
+                    }
+                })
+                .flatMap(new Func1<List<Resolver>, Observable<Resolver>>() {
+                    @Override
+                    public Observable<Resolver> call(List<Resolver> resolvers) {
+                        return Observable.from(resolvers);
+                    }
+                })
+                .filter(new Func1<Resolver, Boolean>() { // 过滤掉包含在 excluded 集合中的 resolver
+                    @Override
+                    public Boolean call(Resolver resolver) {
+                        return !containsInExcluded(resolver);
+                    }
+                })
+                .toList();
+    }
+
+    /**
+     * 当前这个 resolver 是否包含在 {@link #mExcluded} 中
+     *
+     * @return 如果包含在 {@link #mExcluded} 中，则返回 true；否则返回 false。
+     */
+    private Boolean containsInExcluded(@NonNull Resolver resolver) {
+        Preconditions.checkNotNull(resolver, "resolver == null");
+        if (mExcluded == null || mExcluded.size() == 0) {
+            return false;
+        }
+        ComponentName componentName = resolver.loadComponentName();
+        for (ComponentName excluded : mExcluded) {
+            if (excluded.equals(componentName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 当前这个 activityInfo 是否包含在 {@link #mExcluded} 中
+     *
+     * @return 如果包含在 {@link #mExcluded} 中，则返回 true；否则返回 false。
+     */
+    private Boolean containsInExcluded(@NonNull ActivityInfo activityInfo) {
+        Preconditions.checkNotNull(activityInfo, "activityInfo == null");
+        if (mExcluded == null || mExcluded.size() == 0) {
+            return false;
+        }
+        ComponentName componentName = new ComponentName(activityInfo.getPkg(),
+                activityInfo.getCls());
+        for (ComponentName excluded : mExcluded) {
+            if (excluded.equals(componentName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
