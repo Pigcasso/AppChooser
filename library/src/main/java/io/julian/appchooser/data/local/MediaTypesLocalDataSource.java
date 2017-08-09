@@ -12,7 +12,7 @@ import io.julian.appchooser.data.MediaType;
 import io.julian.appchooser.data.MediaTypesDataSource;
 import rx.Observable;
 
-import static io.julian.appchooser.util.Preconditions.checkNotNull;
+import static io.julian.common.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang

@@ -13,7 +13,7 @@ import io.julian.appchooser.data.ActivityInfo;
 import io.julian.appchooser.data.ActivityInfosDataSource;
 import rx.Observable;
 
-import static io.julian.appchooser.util.Preconditions.checkNotNull;
+import static io.julian.common.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang
@@ -25,27 +25,11 @@ public class ActivityInfosSharedPreferencesDataSource implements ActivityInfosDa
 
     private static final String SP_NAME = BuildConfig.APPLICATION_ID + "_preferences";
 
-    private static ActivityInfosSharedPreferencesDataSource INSTANCE;
     private SharedPreferences mPreferences;
 
-    private ActivityInfosSharedPreferencesDataSource(@NonNull Context applicationContext) {
+    public ActivityInfosSharedPreferencesDataSource(@NonNull Context applicationContext) {
         checkNotNull(applicationContext);
         mPreferences = applicationContext.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE);
-    }
-
-    public static ActivityInfosSharedPreferencesDataSource getInstance(@NonNull Context applicationContext) {
-        if (INSTANCE == null) {
-            synchronized (ActivityInfosSharedPreferencesDataSource.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new ActivityInfosSharedPreferencesDataSource(applicationContext);
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    public static void destroyInstance() {
-        INSTANCE = null;
     }
 
     @Override

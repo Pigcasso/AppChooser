@@ -11,7 +11,7 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
-import static io.julian.appchooser.util.Preconditions.checkNotNull;
+import static io.julian.common.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang
@@ -19,7 +19,7 @@ import static io.julian.appchooser.util.Preconditions.checkNotNull;
  * @since 2017/4/15 下午10:22
  */
 
-public class MediaTypesPresenter implements MediaTypesContract.Presenter {
+class MediaTypesPresenter implements MediaTypesContract.Presenter {
 
     @NonNull
     private MediaTypesContract.View mView;
@@ -29,9 +29,9 @@ public class MediaTypesPresenter implements MediaTypesContract.Presenter {
     private MediaTypesRepository mMediaTypesRepository;
     private CompositeSubscription mSubscription;
 
-    public MediaTypesPresenter(@NonNull MediaTypesContract.View view,
-                               @NonNull BaseSchedulerProvider schedulerProvider,
-                               @NonNull MediaTypesRepository mediaTypesRepository) {
+    MediaTypesPresenter(@NonNull MediaTypesContract.View view,
+                        @NonNull BaseSchedulerProvider schedulerProvider,
+                        @NonNull MediaTypesRepository mediaTypesRepository) {
         mView = checkNotNull(view);
         mSchedulerProvider = checkNotNull(schedulerProvider);
         mMediaTypesRepository = checkNotNull(mediaTypesRepository);

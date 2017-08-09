@@ -9,10 +9,10 @@ import io.julian.appchooser.sample.data.FileInfosRepository;
 import io.julian.appchooser.util.schedulers.BaseSchedulerProvider;
 import rx.functions.Action1;
 
-import static io.julian.appchooser.util.Preconditions.checkArgument;
-import static io.julian.appchooser.util.Preconditions.checkNotNull;
+import static io.julian.common.Preconditions.checkArgument;
+import static io.julian.common.Preconditions.checkNotNull;
 
-public class FileInfosPresenter implements FileInfosContract.Presenter {
+class FileInfosPresenter implements FileInfosContract.Presenter {
 
     @NonNull
     private final FileInfo mDirectory;
@@ -23,10 +23,10 @@ public class FileInfosPresenter implements FileInfosContract.Presenter {
     @NonNull
     private FileInfosContract.View mView;
 
-    public FileInfosPresenter(@NonNull FileInfo directory,
-                              @NonNull BaseSchedulerProvider schedulerProvider,
-                              @NonNull FileInfosContract.View view,
-                              @NonNull FileInfosRepository fileInfosRepository) {
+    FileInfosPresenter(@NonNull FileInfo directory,
+                       @NonNull BaseSchedulerProvider schedulerProvider,
+                       @NonNull FileInfosContract.View view,
+                       @NonNull FileInfosRepository fileInfosRepository) {
         checkNotNull(directory);
         checkArgument(directory.isDirectory());
         mDirectory = directory;

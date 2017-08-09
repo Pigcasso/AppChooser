@@ -20,11 +20,11 @@ import io.julian.appchooser.util.schedulers.SchedulerProvider;
 public class Injection {
 
     public static MediaTypesRepository provideMediaTypesRepository(@NonNull Context context) {
-        return MediaTypesRepository.getInstance(new MediaTypesLocalDataSource(context));
+        return new MediaTypesRepository(new MediaTypesLocalDataSource(context));
     }
 
     public static ActivityInfosRepository provideActivityInfosRepository(@NonNull Context context) {
-        return ActivityInfosRepository.getInstance(ActivityInfosSharedPreferencesDataSource.getInstance(context));
+        return new ActivityInfosRepository(new ActivityInfosSharedPreferencesDataSource(context));
     }
 
     public static ResolversRepository providerResolversRepository(@NonNull Context context) {

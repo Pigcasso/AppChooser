@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import java.io.File;
 import java.util.List;
 
-import io.julian.appchooser.util.Preconditions;
 import io.julian.appchooser.util.schedulers.BaseSchedulerProvider;
+import io.julian.common.Preconditions;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -18,27 +18,11 @@ import rx.functions.Func1;
 
 public class FileInfosRepository implements FileInfosDataSource {
 
-    private static FileInfosRepository INSTANCE;
     @NonNull
     private BaseSchedulerProvider mSchedulerProvider;
 
-    private FileInfosRepository(@NonNull BaseSchedulerProvider schedulerProvider) {
-        mSchedulerProvider = schedulerProvider;
-    }
-
-    public static FileInfosRepository getInstance(@NonNull BaseSchedulerProvider schedulerProvider) {
-        if (INSTANCE == null) {
-            synchronized (FileInfosRepository.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new FileInfosRepository(schedulerProvider);
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    public static void destroyInstance() {
-        INSTANCE = null;
+    public FileInfosRepository(@NonNull BaseSchedulerProvider schedulerProvider) {
+        mSchedulerProvider = Preconditions.checkNotNull(schedulerProvider, "schedulerProvider == null");
     }
 
     @Override

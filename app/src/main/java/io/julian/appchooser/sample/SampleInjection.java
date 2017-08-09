@@ -9,8 +9,8 @@ import io.julian.appchooser.sample.data.FileInfosRepository;
  * @since 2017/5/13 下午3:53
  */
 
-public class Injection extends io.julian.appchooser.Injection {
+public class SampleInjection extends io.julian.appchooser.Injection {
     public static FileInfosRepository provideFileInfoRepository() {
-        return FileInfosRepository.getInstance(provideSchedulerProvider());
+        return new FileInfosRepository(provideSchedulerProvider());
     }
 }

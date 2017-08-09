@@ -1,7 +1,6 @@
 package io.julian.appchooser.data;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Action1;
 
-import static io.julian.appchooser.util.Preconditions.checkNotNull;
+import static io.julian.common.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang
@@ -18,29 +17,13 @@ import static io.julian.appchooser.util.Preconditions.checkNotNull;
  */
 public class MediaTypesRepository implements MediaTypesDataSource {
 
-    @Nullable
-    private static MediaTypesRepository INSTANCE;
-
     @NonNull
     private final MediaTypesDataSource mMediaTypesLocalDataSource;
 
     private List<MediaType> mCachedMediaTypes;
 
-    private MediaTypesRepository(@NonNull MediaTypesDataSource mediaTypesLocalDataSource) {
+    public MediaTypesRepository(@NonNull MediaTypesDataSource mediaTypesLocalDataSource) {
         mMediaTypesLocalDataSource = checkNotNull(mediaTypesLocalDataSource);
-    }
-
-    public static MediaTypesRepository getInstance(
-            @NonNull MediaTypesDataSource mediaTypesLocalDataSource) {
-
-        if (INSTANCE == null) {
-            synchronized (MediaTypesRepository.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new MediaTypesRepository(mediaTypesLocalDataSource);
-                }
-            }
-        }
-        return INSTANCE;
     }
 
     @Override

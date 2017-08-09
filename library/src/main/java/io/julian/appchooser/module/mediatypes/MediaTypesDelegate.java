@@ -33,7 +33,6 @@ public class MediaTypesDelegate implements FragmentCallback, MediaTypesContract.
     private Context mContext;
     private MediaTypesContract.Presenter mPresenter;
     private MediaTypesAdapter mMediaTypesAdapter;
-    private View mViewRoot;
 
     public MediaTypesDelegate(Context context) {
         mContext = context;
@@ -71,7 +70,6 @@ public class MediaTypesDelegate implements FragmentCallback, MediaTypesContract.
 
     @Override
     public void onDestroyView() {
-        mViewRoot = null;
     }
 
     @Override
@@ -106,10 +104,5 @@ public class MediaTypesDelegate implements FragmentCallback, MediaTypesContract.
     @Nullable
     public Context getContext() {
         return mContext;
-    }
-
-    @Nullable
-    public View getView() {
-        return mViewRoot;
     }
 }

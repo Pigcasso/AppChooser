@@ -11,19 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.julian.appchooser.BuildConfig;
-import io.julian.appchooser.sample.Injection;
 import io.julian.appchooser.sample.R;
+import io.julian.appchooser.sample.SampleInjection;
 import io.julian.appchooser.sample.data.FileInfo;
-import io.julian.appchooser.util.Preconditions;
+import io.julian.common.Preconditions;
 
 public class FileInfosFragment extends Fragment implements FileInfosContract.View {
 
@@ -51,9 +47,9 @@ public class FileInfosFragment extends Fragment implements FileInfosContract.Vie
         }
         // Create the presenter
         new FileInfosPresenter(new FileInfo(new File(absolutePath)),
-                Injection.provideSchedulerProvider(),
+                SampleInjection.provideSchedulerProvider(),
                 this,
-                Injection.provideFileInfoRepository());
+                SampleInjection.provideFileInfoRepository());
         mAdapter = new FileInfosAdapter(getContext(), new ArrayList<FileInfo>());
     }
 

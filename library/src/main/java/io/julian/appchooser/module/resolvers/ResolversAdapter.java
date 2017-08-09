@@ -13,21 +13,21 @@ import java.util.List;
 import io.julian.appchooser.R;
 import io.julian.appchooser.data.Resolver;
 
-import static io.julian.appchooser.util.Preconditions.checkNotNull;
+import static io.julian.common.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang
  * @version 1.0
  * @since 2017/4/16 上午11:50
  */
-public class ResolversAdapter extends CommonAdapter<Resolver> {
+class ResolversAdapter extends CommonAdapter<Resolver> {
 
     @NonNull
-    OnResolversListener mOnResolversListener;
+    private OnResolversListener mOnResolversListener;
     @NonNull
     private PackageManager mPackageManager;
 
-    public ResolversAdapter(Context context, List<Resolver> datas, OnResolversListener onResolversListener) {
+    ResolversAdapter(Context context, List<Resolver> datas, OnResolversListener onResolversListener) {
         super(context, R.layout.item_resolver, datas);
         mPackageManager = context.getPackageManager();
         mOnResolversListener = checkNotNull(onResolversListener);

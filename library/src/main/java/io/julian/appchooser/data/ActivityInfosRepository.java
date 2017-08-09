@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 
 import rx.Observable;
 
-import static io.julian.appchooser.util.Preconditions.checkNotNull;
+import static io.julian.common.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang
@@ -15,26 +15,10 @@ import static io.julian.appchooser.util.Preconditions.checkNotNull;
 
 public class ActivityInfosRepository implements ActivityInfosDataSource {
 
-    private static ActivityInfosRepository INSTANCE;
     private ActivityInfosDataSource mActivityInfosLocalDataSource;
 
-    private ActivityInfosRepository(@NonNull ActivityInfosDataSource activityInfosDataSource) {
+    public ActivityInfosRepository(@NonNull ActivityInfosDataSource activityInfosDataSource) {
         mActivityInfosLocalDataSource = checkNotNull(activityInfosDataSource);
-    }
-
-    public static ActivityInfosRepository getInstance(@NonNull ActivityInfosDataSource activityInfosDataSource) {
-        if (INSTANCE == null) {
-            synchronized (ActivityInfosRepository.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new ActivityInfosRepository(activityInfosDataSource);
-                }
-            }
-        }
-        return INSTANCE;
-    }
-
-    public static void destroyInstance() {
-        INSTANCE = null;
     }
 
     @Override

@@ -21,7 +21,7 @@ import io.julian.appchooser.R;
 import io.julian.appchooser.data.Resolver;
 import io.julian.appchooser.module.base.FragmentCallback;
 
-import static io.julian.appchooser.util.Preconditions.checkNotNull;
+import static io.julian.common.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang

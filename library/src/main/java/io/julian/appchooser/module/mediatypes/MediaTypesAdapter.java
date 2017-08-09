@@ -12,7 +12,7 @@ import java.util.List;
 import io.julian.appchooser.R;
 import io.julian.appchooser.data.MediaType;
 
-import static io.julian.appchooser.util.Preconditions.checkNotNull;
+import static io.julian.common.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang
@@ -20,11 +20,11 @@ import static io.julian.appchooser.util.Preconditions.checkNotNull;
  * @since 2017/4/15 下午9:35
  */
 
-public class MediaTypesAdapter extends CommonAdapter<MediaType> {
+class MediaTypesAdapter extends CommonAdapter<MediaType> {
 
     private OnMediaTypesListener mOnMediaTypesListener;
 
-    public MediaTypesAdapter(Context context, OnMediaTypesListener onMediaTypesListener) {
+    MediaTypesAdapter(Context context, OnMediaTypesListener onMediaTypesListener) {
         super(context, R.layout.item_media_type, new ArrayList<MediaType>());
         mOnMediaTypesListener = checkNotNull(onMediaTypesListener);
     }

@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.io.File;
 
-import io.julian.appchooser.util.Preconditions;
+import io.julian.common.Preconditions;
 
 /**
  * @author Zhu Liang
