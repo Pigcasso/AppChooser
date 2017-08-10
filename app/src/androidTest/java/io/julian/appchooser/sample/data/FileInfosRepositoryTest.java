@@ -23,7 +23,7 @@ public class FileInfosRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        mFileInfosRepository = FileInfosRepository.getInstance(new ImmediateSchedulerProvider());
+        mFileInfosRepository = new FileInfosRepository(new ImmediateSchedulerProvider());
     }
 
     @Test
