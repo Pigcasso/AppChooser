@@ -6,8 +6,10 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.FileProvider;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,6 +43,7 @@ public class AppChooser implements AppChooserContract.View {
     private Activity mActivity;
     private File mFile;
     private int mRequestCode;
+    private String mAuthority;
     private List<ComponentName> mExcluded;
     private AppChooserContract.Presenter mPresenter;
     private DialogCompatImpl mDialogCompat;
@@ -65,6 +68,11 @@ public class AppChooser implements AppChooserContract.View {
 
     public AppChooser requestCode(int requestCode) {
         mRequestCode = requestCode;
+        return this;
+    }
+
+    public AppChooser authority(String authority) {
+        mAuthority = authority;
         return this;
     }
 
@@ -99,7 +107,14 @@ public class AppChooser implements AppChooserContract.View {
     public void showFileContent(ActivityInfo activityInfo, File file) throws AppChooserException {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setComponent(new ComponentName(activityInfo.getPkg(), activityInfo.getCls()));
-        intent.setDataAndType(Uri.fromFile(file), activityInfo.getMimeType());
+        Uri contentUri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            contentUri = FileProvider.getUriForFile(mActivity, mAuthority, file);
+        } else {
+            contentUri = Uri.fromFile(file);
+        }
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        intent.setDataAndType(contentUri, activityInfo.getMimeType());
         ComponentName componentName = intent.resolveActivity(mActivity.getPackageManager());
         if (componentName != null) {
             try {
