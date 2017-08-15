@@ -1,8 +1,8 @@
 project.ext {
 
     // Android编译版本相关
-    compileSdkVersion = 26
-    buildToolsVersion = '26.0.0'
+    compileSdkVersion = 23
+    buildToolsVersion = '23.0.3'
     minSdkVersion = 14
     targetSdkVersion = 23
 }
@@ -27,7 +27,7 @@ ext.deps = [
         zhybaservadapter   : 'com.zhy:base-rvadapter:3.0.3',
 
         // julian
-        juliancommon       : 'io.julian:common:1.0.9',
-        julianmvp          : 'io.julian:mvp:1.0.7'
+        juliancommon       : 'io.julian:common:1.0.10',
+        julianmvp          : 'io.julian:mvp:1.0.8'
 
 ]
