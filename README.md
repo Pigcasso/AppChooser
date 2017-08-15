@@ -16,7 +16,7 @@
 `compile 'io.julian:appchooser:1.1.0'`
 
 ## 1.1.0 特性
-- 允许屏蔽掉制定的 Component 作为选择项。
+- 允许屏蔽掉指定的 Component 作为选择项（详情请查看----使用方法）。
 
 ## 1.0.6 特性
 
@@ -45,12 +45,20 @@ context.startActivity(intent);
 ```java
 @NonNull
 private AppChooser mAppChooser;
+
+// 屏蔽掉下面的组件，将不会显示在备选打开方式列表中
+ComponentName[] excluded = new ComponentName[]{
+        new ComponentName("nutstore.android", "nutstore.android.SendToNutstoreIndex"),
+        new ComponentName("nutstore.android.debug", "nutstore.android.SendToNutstoreIndex"),
+};
+
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_file_infos);
   	// 初始化 AppChooser
-    mAppChooser = AppChooser.with(this); 
+    mAppChooser = AppChooser.with(this)
+    	excluded(excluded); 
 }
 
 @Override
