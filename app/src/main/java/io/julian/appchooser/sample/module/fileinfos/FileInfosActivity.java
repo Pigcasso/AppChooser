@@ -6,7 +6,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +31,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -55,6 +61,9 @@ public class FileInfosActivity extends AppCompatActivity {
 
     private ArrayAdapter<FileInfo> mAdapter;
     private Spinner mSpinner;
+    private TabLayout mTabLayout;
+
+    private MyHandler mMyHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +73,8 @@ public class FileInfosActivity extends AppCompatActivity {
             mDirectories = savedInstanceState.getParcelableArrayList(EXTRA_DIRECTORIES);
             mSelectedDirectory = savedInstanceState.getParcelable(EXTRA_SELECTED_DIRECTORy);
         }
+
+        mMyHandler = new MyHandler(this);
 
         mFragmentManager = getSupportFragmentManager();
 
@@ -92,6 +103,30 @@ public class FileInfosActivity extends AppCompatActivity {
 
             }
         });
+        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                showDirectory((FileInfo) tab.getTag());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        int count = mDirectories.size();
+        for (int i = 0; i < count; i++) {
+            FileInfo directory = mDirectories.get(i);
+            mTabLayout.addTab(mTabLayout.newTab().setText(directory.getName()).setTag(directory),
+                    i, directory.equals(mSelectedDirectory));
+        }
 
         mAppChooser = AppChooser.with(this).excluded(excluded);
 
@@ -202,6 +237,7 @@ public class FileInfosActivity extends AppCompatActivity {
                     ft.detach(f);
                 }
             }
+
             Fragment f = mFragmentManager.findFragmentByTag(fileInfo.getAbsolutePath());
             if (f == null) {
                 f = FileInfosFragment.newInstance(fileInfo.getAbsolutePath());
@@ -209,6 +245,8 @@ public class FileInfosActivity extends AppCompatActivity {
             } else {
                 ft.attach(f);
             }
+
+            mSelectedDirectory = fileInfo;
 
             String selectedPath = fileInfo.getAbsolutePath();
             Iterator<FileInfo> iterator = mDirectories.iterator();
@@ -222,19 +260,82 @@ public class FileInfosActivity extends AppCompatActivity {
                         ft.remove(removedFragment);
                     }
                     iterator.remove();
+                    int tabPosition = getPositionForTab(info);
+                    if (tabPosition != -1) {
+                        mTabLayout.removeTabAt(tabPosition);
+                    }
                 }
             }
 
             if (!mDirectories.contains(fileInfo)) {
                 mDirectories.add(fileInfo);
+                mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.directory_tab_view)
+                        .setText(fileInfo.getName()).setTag(fileInfo));
             }
 
             ft.commit();
-            mSelectedDirectory = fileInfo;
 
-            mAdapter.notifyDataSetChanged();
+            int selectedTabPosition = getPositionForTab(fileInfo);
+            if (selectedTabPosition != -1) {
+                Message msg = mMyHandler.obtainMessage();
+                msg.arg1 = selectedTabPosition;
+                mMyHandler.sendMessageDelayed(msg, 100);
+            }
+        }
+    }
 
-            mSpinner.setSelection(mDirectories.indexOf(fileInfo));
+    private int getPositionForTab(FileInfo directory) {
+        int tabCount = mTabLayout.getTabCount();
+        for (int i = 0; i < tabCount; i++) {
+            FileInfo tag = (FileInfo) mTabLayout.getTabAt(i).getTag();
+            if (tag.equals(directory)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void selectTab(int position) {
+        if (position < 0) {
+            return;
+        }
+        TabLayout.Tab tab = position < mTabLayout.getTabCount()
+                ? mTabLayout.getTabAt(position)
+                : null;
+        if (tab == null) {
+            return;
+        }
+        try {
+            Method method = TabLayout.class.getDeclaredMethod("selectTab", TabLayout.Tab.class);
+            method.setAccessible(true);
+            method.invoke(mTabLayout, tab);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static class MyHandler extends Handler {
+
+        private WeakReference<FileInfosActivity> mReference;
+
+        private MyHandler(FileInfosActivity fileInfosActivity) {
+            mReference = new WeakReference<>(fileInfosActivity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            FileInfosActivity fileInfosActivity = mReference.get();
+            if (fileInfosActivity != null) {
+                int selectedTabPosition = msg.arg1;
+                fileInfosActivity.selectTab(selectedTabPosition);
+                fileInfosActivity.mAdapter.notifyDataSetChanged();
+                fileInfosActivity.mSpinner.setSelection(selectedTabPosition);
+            }
         }
     }
 }
