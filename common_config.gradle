@@ -16,6 +16,7 @@ ext.deps = [
         support            : 'com.android.support:support-v4:23.4.0',
         supportrecyclerview: 'com.android.support:recyclerview-v7:23.4.0',
         supportappcompat   : 'com.android.support:appcompat-v7:23.4.0',
+        supportdesign      : 'com.android.support:design:23.4.0',
 
         // rxjava
         rxjava             : 'io.reactivex:rxjava:1.2.5',

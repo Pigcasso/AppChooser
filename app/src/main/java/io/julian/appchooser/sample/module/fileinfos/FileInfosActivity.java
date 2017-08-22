@@ -8,17 +8,28 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import io.julian.appchooser.AppChooser;
 import io.julian.appchooser.sample.R;
@@ -27,6 +38,9 @@ import io.julian.appchooser.sample.data.FileInfo;
 public class FileInfosActivity extends AppCompatActivity {
     private static final String TAG = FileInfosActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 110;
+    private static final String EXTRA_SELECTED_DIRECTORy = "extra_selected_directory";
+    private static final String EXTRA_DIRECTORIES = "extra_directories";
+
     private AppChooser mAppChooser;
 
     ComponentName[] excluded = new ComponentName[]{
@@ -34,11 +48,50 @@ public class FileInfosActivity extends AppCompatActivity {
             new ComponentName("nutstore.android.debug", "nutstore.android.SendToNutstoreIndex"),
     };
 
+    private ArrayList<FileInfo> mDirectories = new ArrayList<>();
+    private FileInfo mSelectedDirectory;
+
+    private FragmentManager mFragmentManager;
+
+    private ArrayAdapter<FileInfo> mAdapter;
+    private Spinner mSpinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (savedInstanceState != null) {
+            mDirectories = savedInstanceState.getParcelableArrayList(EXTRA_DIRECTORIES);
+            mSelectedDirectory = savedInstanceState.getParcelable(EXTRA_SELECTED_DIRECTORy);
+        }
+
+        mFragmentManager = getSupportFragmentManager();
+
         setContentView(R.layout.activity_file_infos);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+
+        mSpinner = (Spinner) findViewById(R.id.spinner);
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mDirectories);
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(mAdapter);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                showDirectory(mDirectories.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         mAppChooser = AppChooser.with(this).excluded(excluded);
 
@@ -50,11 +103,18 @@ public class FileInfosActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             } else {
-                showRootDirectory();
+                showDirectory(mSelectedDirectory);
             }
         } else {
-            showRootDirectory();
+            showDirectory(mSelectedDirectory);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(EXTRA_DIRECTORIES, mDirectories);
+        outState.putParcelable(EXTRA_SELECTED_DIRECTORy, mSelectedDirectory);
     }
 
     @Override
@@ -84,7 +144,7 @@ public class FileInfosActivity extends AppCompatActivity {
             boolean granted = grantResult == PackageManager.PERMISSION_GRANTED;
             Log.i(TAG, "onRequestPermissionsResult granted=" + granted);
             if (granted) {
-                showRootDirectory();
+                showDirectory(mSelectedDirectory);
             }
         }
     }
@@ -105,6 +165,18 @@ public class FileInfosActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        int selectedPosition = mDirectories.indexOf(mSelectedDirectory);
+        if (selectedPosition == 0) {
+            super.onBackPressed();
+        } else {
+            int previousPosiotn = selectedPosition - 1;
+            FileInfo previousDirectory = mDirectories.get(previousPosiotn);
+            showDirectory(previousDirectory);
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFileInfo(FileInfo fileInfo) {
         if (fileInfo.isFile()) {
@@ -118,22 +190,51 @@ public class FileInfosActivity extends AppCompatActivity {
         mAppChooser.file(new File(file.getAbsolutePath())).load();
     }
 
-    private void showDirectory(FileInfo directory) {
-        FileInfosFragment fragment = FileInfosFragment.newInstance(directory.getAbsolutePath());
-        getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
+    private void showDirectory(FileInfo fileInfo) {
+        if (fileInfo == null) {
+            fileInfo = new FileInfo(Environment.getExternalStorageDirectory());
+        }
+        if (mSelectedDirectory != fileInfo) {
+            FragmentTransaction ft = mFragmentManager.beginTransaction();
+            if (mSelectedDirectory != null) {
+                Fragment f = mFragmentManager.findFragmentByTag(mSelectedDirectory.getAbsolutePath());
+                if (f != null) {
+                    ft.detach(f);
+                }
+            }
+            Fragment f = mFragmentManager.findFragmentByTag(fileInfo.getAbsolutePath());
+            if (f == null) {
+                f = FileInfosFragment.newInstance(fileInfo.getAbsolutePath());
+                ft.add(R.id.contentFrame, f, fileInfo.getAbsolutePath());
+            } else {
+                ft.attach(f);
+            }
 
-    private void showRootDirectory() {
+            String selectedPath = fileInfo.getAbsolutePath();
+            Iterator<FileInfo> iterator = mDirectories.iterator();
+            while (iterator.hasNext()) {
+                FileInfo info = iterator.next();
+                String path = info.getAbsolutePath();
+                if (!path.equals(selectedPath)
+                        && path.indexOf(selectedPath) == 0) {
+                    Fragment removedFragment = mFragmentManager.findFragmentByTag(path);
+                    if (removedFragment != null) {
+                        ft.remove(removedFragment);
+                    }
+                    iterator.remove();
+                }
+            }
 
-        FileInfosFragment fragment =
-                (FileInfosFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
-        if (fragment == null) {
-            // Create the fragment
-            fragment = FileInfosFragment.newInstance(Environment.getExternalStorageDirectory().getAbsolutePath());
-            getSupportFragmentManager().beginTransaction().add(R.id.contentFrame, fragment)
-                    .commit();
+            if (!mDirectories.contains(fileInfo)) {
+                mDirectories.add(fileInfo);
+            }
+
+            ft.commit();
+            mSelectedDirectory = fileInfo;
+
+            mAdapter.notifyDataSetChanged();
+
+            mSpinner.setSelection(mDirectories.indexOf(fileInfo));
         }
     }
 }
