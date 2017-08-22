@@ -124,8 +124,9 @@ public class FileInfosActivity extends AppCompatActivity {
         int count = mDirectories.size();
         for (int i = 0; i < count; i++) {
             FileInfo directory = mDirectories.get(i);
-            mTabLayout.addTab(mTabLayout.newTab().setText(directory.getName()).setTag(directory),
-                    i, directory.equals(mSelectedDirectory));
+            mTabLayout.addTab(mTabLayout.newTab().setText(directory.getName()).setTag(directory)
+                            .setCustomView(R.layout.directory_tab_view), i,
+                    directory.equals(mSelectedDirectory));
         }
 
         mAppChooser = AppChooser.with(this).excluded(excluded);
