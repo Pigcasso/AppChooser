@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -21,16 +22,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -40,12 +39,24 @@ import java.util.Iterator;
 import io.julian.appchooser.AppChooser;
 import io.julian.appchooser.sample.R;
 import io.julian.appchooser.sample.data.FileInfo;
+import io.julian.common.Preconditions;
 
 public class FileInfosActivity extends AppCompatActivity {
     private static final String TAG = FileInfosActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 110;
     private static final String EXTRA_SELECTED_DIRECTORy = "extra_selected_directory";
     private static final String EXTRA_DIRECTORIES = "extra_directories";
+
+    private static final int OPERATION_NONE = 0;
+    private static final int OPERATION_BACK_PRESSED = 1;
+    private static final int OPERATION_SELECTED_TAB = 2;
+    private static final int OPERATION_CLICK_ITEM = 3;
+
+    @IntDef(value = {OPERATION_NONE, OPERATION_BACK_PRESSED, OPERATION_SELECTED_TAB,
+            OPERATION_CLICK_ITEM})
+    @Retention(RetentionPolicy.SOURCE)
+    private @interface Operation {
+    }
 
     private AppChooser mAppChooser;
 
@@ -59,8 +70,6 @@ public class FileInfosActivity extends AppCompatActivity {
 
     private FragmentManager mFragmentManager;
 
-    private ArrayAdapter<FileInfo> mAdapter;
-    private Spinner mSpinner;
     private TabLayout mTabLayout;
 
     private MyHandler mMyHandler;
@@ -88,26 +97,11 @@ public class FileInfosActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(false);
         }
 
-        mSpinner = (Spinner) findViewById(R.id.spinner);
-        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mDirectories);
-        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinner.setAdapter(mAdapter);
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                showDirectory(mDirectories.get(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                showDirectory((FileInfo) tab.getTag());
+                showDirectory((FileInfo) tab.getTag(), OPERATION_SELECTED_TAB);
             }
 
             @Override
@@ -121,14 +115,6 @@ public class FileInfosActivity extends AppCompatActivity {
             }
         });
 
-        int count = mDirectories.size();
-        for (int i = 0; i < count; i++) {
-            FileInfo directory = mDirectories.get(i);
-            mTabLayout.addTab(mTabLayout.newTab().setText(directory.getName()).setTag(directory)
-                            .setCustomView(R.layout.directory_tab_view), i,
-                    directory.equals(mSelectedDirectory));
-        }
-
         mAppChooser = AppChooser.with(this).excluded(excluded);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -139,10 +125,10 @@ public class FileInfosActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
             } else {
-                showDirectory(mSelectedDirectory);
+                showDirectory(null, OPERATION_NONE);
             }
         } else {
-            showDirectory(mSelectedDirectory);
+            showDirectory(null, OPERATION_NONE);
         }
     }
 
@@ -180,7 +166,7 @@ public class FileInfosActivity extends AppCompatActivity {
             boolean granted = grantResult == PackageManager.PERMISSION_GRANTED;
             Log.i(TAG, "onRequestPermissionsResult granted=" + granted);
             if (granted) {
-                showDirectory(mSelectedDirectory);
+                showDirectory(null, OPERATION_NONE);
             }
         }
     }
@@ -203,14 +189,7 @@ public class FileInfosActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        int selectedPosition = mDirectories.indexOf(mSelectedDirectory);
-        if (selectedPosition == 0) {
-            super.onBackPressed();
-        } else {
-            int previousPosiotn = selectedPosition - 1;
-            FileInfo previousDirectory = mDirectories.get(previousPosiotn);
-            showDirectory(previousDirectory);
-        }
+        showDirectory(null, OPERATION_BACK_PRESSED);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -218,7 +197,7 @@ public class FileInfosActivity extends AppCompatActivity {
         if (fileInfo.isFile()) {
             showFile(fileInfo);
         } else {
-            showDirectory(fileInfo);
+            showDirectory(fileInfo, OPERATION_CLICK_ITEM);
         }
     }
 
@@ -226,74 +205,188 @@ public class FileInfosActivity extends AppCompatActivity {
         mAppChooser.file(new File(file.getAbsolutePath())).load();
     }
 
-    private void showDirectory(FileInfo fileInfo) {
-        if (fileInfo == null) {
-            fileInfo = new FileInfo(Environment.getExternalStorageDirectory());
+    private void showDirectory(FileInfo fileInfo, @Operation int operation) {
+        Log.d(TAG, "showDirectory: " + operation);
+        switch (operation) {
+            case OPERATION_NONE:
+                showDirectoryWithNone();
+                break;
+            case OPERATION_BACK_PRESSED:
+                showDirectoryWithBackPressed();
+                break;
+            case OPERATION_SELECTED_TAB:
+                showDirectoryWithSelectedTab(fileInfo);
+                break;
+            case OPERATION_CLICK_ITEM:
+                showDirectoryWithClickItem(fileInfo);
+                break;
         }
-        if (mSelectedDirectory != fileInfo) {
-            FragmentTransaction ft = mFragmentManager.beginTransaction();
-            if (mSelectedDirectory != null) {
-                Fragment f = mFragmentManager.findFragmentByTag(mSelectedDirectory.getAbsolutePath());
-                if (f != null) {
-                    ft.detach(f);
+    }
+
+    private void showDirectoryWithNone() {
+        Log.d(TAG, "showDirectoryWithNone11111: " + (mSelectedDirectory == null ? "null" : mSelectedDirectory.getName()) + ", size: " + mDirectories.size());
+        if (mSelectedDirectory == null) {
+            mSelectedDirectory = new FileInfo(Environment.getExternalStorageDirectory());
+            mDirectories.add(mSelectedDirectory);
+        }
+
+        mTabLayout.removeAllTabs();
+        for (FileInfo directory : mDirectories) {
+            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.directory_tab_view)
+                    .setText(directory.getName()).setTag(directory), false);
+        }
+
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        for (FileInfo directory : mDirectories) {
+            Fragment fragment = mFragmentManager.findFragmentByTag(directory.getAbsolutePath());
+            if (fragment != null && !fragment.isDetached()) {
+                if (!mSelectedDirectory.equals(directory)) {
+                    ft.detach(fragment);
                 }
             }
+        }
+        Fragment selected = mFragmentManager.findFragmentByTag(mSelectedDirectory.getAbsolutePath());
+        if (selected == null) {
+            selected = FileInfosFragment.newInstance(mSelectedDirectory.getAbsolutePath());
+            ft.add(R.id.contentFrame, selected, mSelectedDirectory.getAbsolutePath());
+        } else {
+            ft.attach(selected);
+        }
+        ft.commit();
 
-            Fragment f = mFragmentManager.findFragmentByTag(fileInfo.getAbsolutePath());
+        Message msg = mMyHandler.obtainMessage();
+        msg.arg1 = mDirectories.indexOf(mSelectedDirectory);
+        Log.d(TAG, "showDirectoryWithNone22222: " + (mSelectedDirectory == null ? "null" : mSelectedDirectory.getName()) + ", size: " + mDirectories.size());
+        mMyHandler.sendMessageDelayed(msg, 100L);
+    }
+
+    private void showDirectoryWithBackPressed() {
+        Preconditions.checkNotNull(mSelectedDirectory, "mSelectedDirectory == null");
+        Preconditions.checkArgument(mDirectories.contains(mSelectedDirectory),
+                "mDirectories not contain:" + mSelectedDirectory.getAbsolutePath());
+        final int selectedPosition = mDirectories.indexOf(mSelectedDirectory);
+        if (selectedPosition == 0) {
+            finish();
+        } else {
+            FragmentTransaction ft = mFragmentManager.beginTransaction();
+            Fragment f = mFragmentManager.findFragmentByTag(mSelectedDirectory.getAbsolutePath());
+            if (f != null && !f.isDetached()) {
+                ft.detach(f);
+            }
+            int previousPosition = selectedPosition - 1;
+            FileInfo previous = mSelectedDirectory = mDirectories.get(previousPosition);
+            f = mFragmentManager.findFragmentByTag(previous.getAbsolutePath());
+            if (f == null) {
+                f = FileInfosFragment.newInstance(previous.getAbsolutePath());
+                ft.add(R.id.contentFrame, f, previous.getAbsolutePath());
+            } else {
+                ft.attach(f);
+            }
+            ft.commit();
+
+            Message msg = mMyHandler.obtainMessage();
+            msg.arg1 = previousPosition;
+            mMyHandler.sendMessageDelayed(msg, 100L);
+        }
+    }
+
+    private void showDirectoryWithSelectedTab(FileInfo fileInfo) {
+        Preconditions.checkNotNull(fileInfo, "fileInfo == null");
+        Preconditions.checkNotNull(mSelectedDirectory, "mSelectedDirectory == null");
+        Log.d(TAG, "showDirectoryWithSelectedTab: " + fileInfo.getName());
+        if (mSelectedDirectory != fileInfo) {
+            FragmentTransaction ft = mFragmentManager.beginTransaction();
+            Fragment f = mFragmentManager.findFragmentByTag(mSelectedDirectory.getAbsolutePath());
+            if (f != null && !f.isDetached()) {
+                ft.detach(f);
+            }
+
+            mSelectedDirectory = fileInfo;
+
+            f = mFragmentManager.findFragmentByTag(fileInfo.getAbsolutePath());
             if (f == null) {
                 f = FileInfosFragment.newInstance(fileInfo.getAbsolutePath());
                 ft.add(R.id.contentFrame, f, fileInfo.getAbsolutePath());
             } else {
                 ft.attach(f);
             }
+            ft.commit();
+        }
+    }
 
-            mSelectedDirectory = fileInfo;
-
-            String selectedPath = fileInfo.getAbsolutePath();
-            Iterator<FileInfo> iterator = mDirectories.iterator();
-            while (iterator.hasNext()) {
-                FileInfo info = iterator.next();
-                String path = info.getAbsolutePath();
-                if (!path.equals(selectedPath)
-                        && path.indexOf(selectedPath) == 0) {
-                    Fragment removedFragment = mFragmentManager.findFragmentByTag(path);
-                    if (removedFragment != null) {
-                        ft.remove(removedFragment);
-                    }
-                    iterator.remove();
-                    int tabPosition = getPositionForTab(info);
-                    if (tabPosition != -1) {
-                        mTabLayout.removeTabAt(tabPosition);
-                    }
+    private void showDirectoryWithClickItem(@NonNull FileInfo fileInfo) {
+        Preconditions.checkNotNull(fileInfo, "fileInfo == null");
+        // 如果用户当前选中的文件夹已经添加到 mDirectories 中
+        String selectedPath = fileInfo.getAbsolutePath();
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        Iterator<FileInfo> iterator = mDirectories.iterator();
+        while (iterator.hasNext()) {
+            FileInfo child = iterator.next();
+            String childPath = child.getAbsolutePath();
+            if (!selectedPath.contains(childPath)) {
+                Fragment f = mFragmentManager.findFragmentByTag(childPath);
+                if (f != null) {
+                    ft.remove(f);
+                }
+                iterator.remove();
+                int tabPosition = getPositionForTab(child);
+                if (tabPosition != -1) {
+                    mTabLayout.removeTabAt(tabPosition);
                 }
             }
-
-            if (!mDirectories.contains(fileInfo)) {
-                mDirectories.add(fileInfo);
-                mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.directory_tab_view)
-                        .setText(fileInfo.getName()).setTag(fileInfo));
+        }
+        if (mDirectories.contains(mSelectedDirectory)) {
+            Fragment f = mFragmentManager.findFragmentByTag(mSelectedDirectory.getAbsolutePath());
+            if (f != null && !f.isDetached()) {
+                ft.detach(f);
             }
-
-            ft.commit();
-
-            int selectedTabPosition = getPositionForTab(fileInfo);
-            if (selectedTabPosition != -1) {
-                Message msg = mMyHandler.obtainMessage();
-                msg.arg1 = selectedTabPosition;
-                mMyHandler.sendMessageDelayed(msg, 100);
+        } else {
+            Fragment f = mFragmentManager.findFragmentByTag(mSelectedDirectory.getAbsolutePath());
+            if (f != null) {
+                ft.remove(f);
             }
         }
+
+        if (!mDirectories.contains(fileInfo)) {
+            int insertedPosition = mDirectories.size();
+            mDirectories.add(insertedPosition, fileInfo);
+            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.directory_tab_view)
+                    .setText(fileInfo.getName()).setTag(fileInfo), insertedPosition);
+        }
+
+        Fragment f = mFragmentManager.findFragmentByTag(fileInfo.getAbsolutePath());
+        if (f == null) {
+            f = FileInfosFragment.newInstance(fileInfo.getAbsolutePath());
+            ft.add(R.id.contentFrame, f, fileInfo.getAbsolutePath());
+        } else {
+            ft.attach(f);
+        }
+        mSelectedDirectory = fileInfo;
+        ft.commit();
+
+        Message msg = mMyHandler.obtainMessage();
+        msg.arg1 = mDirectories.indexOf(fileInfo);
+        mMyHandler.sendMessageDelayed(msg, 100L);
     }
 
     private int getPositionForTab(FileInfo directory) {
         int tabCount = mTabLayout.getTabCount();
         for (int i = 0; i < tabCount; i++) {
-            FileInfo tag = (FileInfo) mTabLayout.getTabAt(i).getTag();
+            FileInfo tag = getTabTag(mTabLayout.getTabAt(i));
             if (tag.equals(directory)) {
                 return i;
             }
         }
         return -1;
+    }
+
+    @NonNull
+    private FileInfo getTabTag(TabLayout.Tab tab) {
+        FileInfo tabTag = (FileInfo) tab.getTag();
+        if (tabTag == null) {
+            throw new NullPointerException("tabTag == null");
+        }
+        return tabTag;
     }
 
     private void selectTab(int position) {
@@ -334,8 +427,6 @@ public class FileInfosActivity extends AppCompatActivity {
             if (fileInfosActivity != null) {
                 int selectedTabPosition = msg.arg1;
                 fileInfosActivity.selectTab(selectedTabPosition);
-                fileInfosActivity.mAdapter.notifyDataSetChanged();
-                fileInfosActivity.mSpinner.setSelection(selectedTabPosition);
             }
         }
     }
