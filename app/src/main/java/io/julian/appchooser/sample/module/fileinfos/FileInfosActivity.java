@@ -231,9 +231,16 @@ public class FileInfosActivity extends AppCompatActivity {
         }
 
         mTabLayout.removeAllTabs();
-        for (FileInfo directory : mDirectories) {
-            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.directory_tab_view)
-                    .setText(directory.getName()).setTag(directory), false);
+        final int size = mDirectories.size();
+        for (int i = 0; i < size; i++) {
+            FileInfo directory = mDirectories.get(i);
+            if (i == size - 1) {
+                mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.directory_tab_view_without_arrow)
+                        .setText(directory.getName()).setTag(directory), false);
+            } else {
+                mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.directory_tab_view)
+                        .setText(directory.getName()).setTag(directory), false);
+            }
         }
 
         FragmentTransaction ft = mFragmentManager.beginTransaction();
@@ -349,9 +356,29 @@ public class FileInfosActivity extends AppCompatActivity {
 
         if (!mDirectories.contains(fileInfo)) {
             int insertedPosition = mDirectories.size();
+            if (insertedPosition > 0) {
+                int lastPosition = insertedPosition - 1;
+                TabLayout.Tab lastTab = mTabLayout.getTabAt(lastPosition);
+                if (lastTab == null) {
+                    throw new NullPointerException("lastTab == null");
+                }
+                lastTab.setCustomView(null);
+                lastTab.setCustomView(R.layout.directory_tab_view);
+            }
             mDirectories.add(insertedPosition, fileInfo);
-            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.directory_tab_view)
+            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.directory_tab_view_without_arrow)
                     .setText(fileInfo.getName()).setTag(fileInfo), insertedPosition);
+        } else {
+            int position = mDirectories.indexOf(fileInfo);
+            if (position != mDirectories.size() - 1) {
+                throw new IllegalStateException(position + " is not last one");
+            }
+            TabLayout.Tab lastTab = mTabLayout.getTabAt(position);
+            if (lastTab == null) {
+                throw new NullPointerException("lastTab == null");
+            }
+            lastTab.setCustomView(null);
+            lastTab.setCustomView(R.layout.directory_tab_view_without_arrow);
         }
 
         Fragment f = mFragmentManager.findFragmentByTag(fileInfo.getAbsolutePath());
