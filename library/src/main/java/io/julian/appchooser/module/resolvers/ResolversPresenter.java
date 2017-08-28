@@ -16,7 +16,6 @@ import io.julian.appchooser.data.MediaTypesRepository;
 import io.julian.appchooser.data.Resolver;
 import io.julian.appchooser.data.ResolversRepository;
 import io.julian.appchooser.exception.AppChooserException;
-import io.julian.appchooser.util.MimeTypeUtils;
 import io.julian.appchooser.util.schedulers.BaseSchedulerProvider;
 import io.julian.common.Preconditions;
 import rx.Observable;
@@ -34,7 +33,7 @@ public class ResolversPresenter implements ResolversContract.Presenter {
     private final ResolversContract.View mView;
     private final BaseSchedulerProvider mSchedulerProvider;
     private File mFile;
-    private String mRealMimeType;
+    private String mMimeType;
     private int mRequestCode;
     private List<ComponentName> mExcluded;
     private ActivityInfosRepository mActivityInfosRepository;
@@ -45,6 +44,7 @@ public class ResolversPresenter implements ResolversContract.Presenter {
     public ResolversPresenter(@NonNull ResolversContract.View view,
                               @NonNull BaseSchedulerProvider schedulerProvider,
                               @NonNull File file,
+                              String mimeType,
                               int requestCode,
                               @Nullable List<ComponentName> excluded,
                               @NonNull ActivityInfosRepository activityInfosRepository,
@@ -58,8 +58,7 @@ public class ResolversPresenter implements ResolversContract.Presenter {
         mSchedulerProvider = Preconditions.checkNotNull(schedulerProvider,
                 "schedulerProvider == null");
         mFile = file;
-        String mimeType = MimeTypeUtils.getMimeType(mFile);
-        mRealMimeType = mimeType == null ? ResolversConsts.DEFAULT_MIME_TYPE : mimeType;
+        mMimeType = mimeType == null ? ResolversConsts.DEFAULT_MIME_TYPE : mimeType;
 
         mRequestCode = requestCode;
         mExcluded = excluded;
@@ -76,7 +75,7 @@ public class ResolversPresenter implements ResolversContract.Presenter {
 
     @Override
     public void subscribe() {
-        loadActivityInfo(mRealMimeType);
+        loadActivityInfo(mMimeType);
     }
 
     @Override
@@ -195,7 +194,7 @@ public class ResolversPresenter implements ResolversContract.Presenter {
                 .map(new Func1<Resolver, ActivityInfo>() {
                     @Override
                     public ActivityInfo call(Resolver resolver) {
-                        ActivityInfo activityInfo = resolver.loadActivityInfo(mRealMimeType);
+                        ActivityInfo activityInfo = resolver.loadActivityInfo(mMimeType);
                         if (resolver.isDefault()) {
                             mActivityInfosRepository.saveActivityInfo(activityInfo);
                         }

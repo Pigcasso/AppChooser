@@ -35,6 +35,7 @@ import io.julian.appchooser.module.resolvers.ResolversAdapter;
 import io.julian.appchooser.module.resolvers.ResolversConsts;
 import io.julian.appchooser.module.resolvers.ResolversContract;
 import io.julian.appchooser.module.resolvers.ResolversPresenter;
+import io.julian.appchooser.util.MimeTypeUtils;
 
 import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 
@@ -42,12 +43,12 @@ import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
  * @author Zhu Liang
  */
 
-public class ResolversFragment extends BaseDialogFragment<ResolversContract.Presenter>
-        implements ResolversContract.View {
+public class ResolversFragment extends BaseDialogFragment<ResolversContract.Presenter> implements ResolversContract.View {
 
     private static final String EXTRA_FILE = "extra.path";
-    public static final String EXTRA_REQUEST_CODE = "extra.request_code";
+    private static final String EXTRA_REQUEST_CODE = "extra.request_code";
     private static final String EXTRA_EXCLUDED = "extra.EXCLUDED";
+    private static final String EXTRA_MIME_TYPE = "extra.MIME_TYPE";
 
     private RecyclerView mRecyclerView;
     private FrameLayout mAsDefaultContainer;
@@ -69,16 +70,21 @@ public class ResolversFragment extends BaseDialogFragment<ResolversContract.Pres
         super.onAttach(activity);
         if (getArguments() != null) {
             Bundle args = getArguments();
-            File file = (File) args.getSerializable(EXTRA_FILE);
 
+            File file = (File) args.getSerializable(EXTRA_FILE);
             if (file == null) {
                 throw new NullPointerException("file == null");
             }
-
+            String mimeType = args.getString(EXTRA_MIME_TYPE);
+            if (mimeType == null) {
+                mimeType = MimeTypeUtils.getMimeType(file);
+            }
             int requestCode = args.getInt(EXTRA_REQUEST_CODE);
             ArrayList<ComponentName> excluded = args.getParcelableArrayList(EXTRA_EXCLUDED);
+
             new ResolversPresenter(this, Injection.provideSchedulerProvider(),
-                    file, requestCode, excluded, Injection.provideActivityInfosRepository(activity),
+                    file, mimeType, requestCode, excluded,
+                    Injection.provideActivityInfosRepository(activity),
                     Injection.provideMediaTypesRepository(activity),
                     Injection.providerResolversRepository(activity));
         } else {
@@ -132,6 +138,8 @@ public class ResolversFragment extends BaseDialogFragment<ResolversContract.Pres
                 new OnMediaTypesListener() {
                     @Override
                     public void onMediaType(MediaType mediaType) {
+                        // 保存用户选择的"媒体类型"，避免用户旋转屏幕后，仍然显示"媒体类型选择器"
+                        getArguments().putString(EXTRA_MIME_TYPE, mediaType.getMimeType());
                         mPresenter.loadResolvers(mediaType);
                     }
                 }));
