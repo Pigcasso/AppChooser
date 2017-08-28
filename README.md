@@ -13,9 +13,13 @@
 
 ## 依赖
 
-`compile 'io.julian:appchooser:1.1.0'`
+`compile 'io.julian:appchooser:1.2.0'`
+
+## 1.2.0 特性
+- 修复弹出应用选择器后旋转屏幕不能使用选择的打开方式打开文件的bug。
 
 ## 1.1.0 特性
+
 - 允许屏蔽掉指定的 Component 作为选择项（详情请查看----使用方法）。
 
 ## 1.0.6 特性

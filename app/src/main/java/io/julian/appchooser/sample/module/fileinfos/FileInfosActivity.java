@@ -233,6 +233,8 @@ public class FileInfosActivity extends AppCompatActivity {
             case OPERATION_CLICK_ITEM:
                 showDirectoryWithClickItem(fileInfo);
                 break;
+            default:
+                throw new IllegalArgumentException(operation + " is invalid");
         }
     }
 
