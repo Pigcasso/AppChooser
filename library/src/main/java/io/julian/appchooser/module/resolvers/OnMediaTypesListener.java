@@ -1,4 +1,4 @@
-package io.julian.appchooser.module.mediatypes;
+package io.julian.appchooser.module.resolvers;
 
 import io.julian.appchooser.data.MediaType;
 

@@ -2,6 +2,7 @@ package io.julian.appchooser.sample.module.fileinfos;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,6 +53,8 @@ public class FileInfosActivity extends AppCompatActivity {
     private static final int OPERATION_BACK_PRESSED = 1;
     private static final int OPERATION_SELECTED_TAB = 2;
     private static final int OPERATION_CLICK_ITEM = 3;
+
+    private static final int REQUEST_CODE_OPEN_FILE = 10;
 
     @IntDef(value = {OPERATION_NONE, OPERATION_BACK_PRESSED, OPERATION_SELECTED_TAB,
             OPERATION_CLICK_ITEM})
@@ -172,6 +176,15 @@ public class FileInfosActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (RESULT_OK == resultCode
+                && REQUEST_CODE_OPEN_FILE == requestCode) {
+            Toast.makeText(this, data.getData().getPath(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_file_infos, menu);
         return true;
@@ -202,7 +215,7 @@ public class FileInfosActivity extends AppCompatActivity {
     }
 
     private void showFile(FileInfo file) {
-        mAppChooser.file(new File(file.getAbsolutePath())).load();
+        mAppChooser.file(new File(file.getAbsolutePath())).requestCode(REQUEST_CODE_OPEN_FILE).load();
     }
 
     private void showDirectory(FileInfo fileInfo, @Operation int operation) {

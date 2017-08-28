@@ -1,31 +1,16 @@
 package io.julian.appchooser;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.widget.Toast;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import io.julian.appchooser.data.ActivityInfo;
-import io.julian.appchooser.data.MediaType;
-import io.julian.appchooser.data.Resolver;
-import io.julian.appchooser.exception.AppChooserException;
-import io.julian.appchooser.module.mediatypes.MediaTypesDialogFragment;
-import io.julian.appchooser.module.resolvers.ResolversDialogFragment;
-import io.julian.appchooser.util.ActivityUtils;
-import io.julian.appchooser.util.MimeTypeUtils;
+import io.julian.appchooser.module.resolvers.ResolversFragment;
+import io.julian.common.Preconditions;
 
 /**
  * @author Zhu Liang
@@ -35,23 +20,18 @@ import io.julian.appchooser.util.MimeTypeUtils;
 
 public class AppChooser implements AppChooserContract.View {
 
-    private static final String TAG_RESOLVES = "tag_resolvers";
-    private static final String TAG_MIME_TYPES = "tag_mime_types";
+    private static final String TAG_DISPLAYINGS = "tag_resolvers";
 
     private Activity mActivity;
     private File mFile;
     private int mRequestCode;
-    private List<ComponentName> mExcluded;
+    private ArrayList<ComponentName> mExcluded;
     private AppChooserContract.Presenter mPresenter;
-    private DialogCompatImpl mDialogCompat;
 
-    private AppChooser(Activity activity) {
-        mActivity = activity;
-        if (mActivity instanceof FragmentActivity) {
-            mDialogCompat = new SupportDialogCompatImpl((FragmentActivity) mActivity);
-        } else {
-            mDialogCompat = new HCDialogCompatImpl(mActivity);
-        }
+    private AppChooser(@NonNull Activity activity) {
+        mActivity = Preconditions.checkNotNull(activity, "activity == null");
+        mPresenter = new AppChooserPresenter(Injection.provideSchedulerProvider(),
+                Injection.provideActivityInfosRepository(mActivity));
     }
 
     public static AppChooser with(Activity activity) {
@@ -59,6 +39,10 @@ public class AppChooser implements AppChooserContract.View {
     }
 
     public AppChooser file(File file) {
+        Preconditions.checkNotNull(file, "file == null");
+        Preconditions.checkArgument(file.exists(), file.getName() + " does not exist");
+        Preconditions.checkArgument(file.isFile(), file.getName() + " is not file");
+
         mFile = file;
         return this;
     }
@@ -70,183 +54,48 @@ public class AppChooser implements AppChooserContract.View {
 
     public AppChooser excluded(ComponentName... componentNames) {
         if (componentNames != null) {
-            mExcluded = Arrays.asList(componentNames);
+            mExcluded = new ArrayList<>(Arrays.asList(componentNames));
         }
         return this;
     }
 
     public void load() {
-        if (mExcluded == null || mExcluded.size() == 0) {
-            mPresenter = new AppChooserPresenter(this,
-                    Injection.provideSchedulerProvider(),
-                    mFile,
-                    MimeTypeUtils.getMimeType(mFile),
-                    Injection.provideActivityInfosRepository(mActivity),
-                    Injection.providerResolversRepository(mActivity));
-        } else {
-            mPresenter = new AppChooserPresenter(this,
-                    Injection.provideSchedulerProvider(),
-                    mFile,
-                    MimeTypeUtils.getMimeType(mFile),
-                    mExcluded,
-                    Injection.provideActivityInfosRepository(mActivity),
-                    Injection.providerResolversRepository(mActivity));
-        }
-        mPresenter.subscribe();
-    }
-
-    @Override
-    public void showFileContent(ActivityInfo activityInfo, File file) throws AppChooserException {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setComponent(new ComponentName(activityInfo.getPkg(), activityInfo.getCls()));
-        intent.setDataAndType(Uri.fromFile(file), activityInfo.getMimeType());
-        ComponentName componentName = intent.resolveActivity(mActivity.getPackageManager());
-        if (componentName != null) {
-            try {
-                if (mRequestCode == AppChooserContract.DEFAULT_REQUEST_CODE) {
-                    mActivity.startActivity(intent);
-                } else {
-                    mActivity.startActivityForResult(intent, mRequestCode);
-                }
-            } catch (ActivityNotFoundException e) {
-                throw new AppChooserException(e);
-            }
-        } else {
-            throw new AppChooserException();
-        }
-    }
-
-    @Override
-    public void showMediaTypes() {
-        mDialogCompat.showMediaTypes();
-    }
-
-    @Override
-    public void showResolvers(List<Resolver> resolvers) {
-        mDialogCompat.showResolvers(resolvers);
-    }
-
-    @Override
-    public void hideResolvers() {
-        mDialogCompat.hideResolvers();
-    }
-
-    @Override
-    public void showFileContentError(File file) {
-        Toast.makeText(mActivity, mActivity.getString(R.string.app_chooser_failed_to_open_file, file.getName()), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showNoResolvers(MediaType mediaType) {
-        Toast.makeText(mActivity, mActivity.getString(R.string.app_chooser_did_not_find_an_app_that_can_open_this_file, mediaType.getDisplayName()), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void setPresenter(@NonNull AppChooserContract.Presenter presenter) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMediaType(MediaType mediaType) {
-        mPresenter.loadResolvers(mediaType);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onResolver(Resolver resolver) {
-        hideResolvers();
-        mPresenter.loadResolver(resolver);
+        showDisplayings();
     }
 
     public void cleanDefaults() {
-        if (mPresenter == null) {
-            mPresenter = new AppChooserPresenter(Injection.provideSchedulerProvider(),
-                    Injection.provideActivityInfosRepository(mActivity));
+        if (mPresenter != null) {
+            mPresenter.cleanAllActivityInfos();
         }
-        mPresenter.cleanAllActivityInfos();
     }
 
     public void bind() {
-        EventBus.getDefault().register(this);
+        if (mPresenter != null) {
+            mPresenter.subscribe();
+        }
     }
 
     public void unbind() {
-        EventBus.getDefault().unregister(this);
         if (mPresenter != null) {
             mPresenter.unsubscribe();
         }
     }
 
-    interface DialogCompatImpl {
-        void showMediaTypes();
-
-        void showResolvers(List<Resolver> resolvers);
-
-        void hideResolvers();
-    }
-
-    private static class SupportDialogCompatImpl implements DialogCompatImpl {
-
-        private FragmentActivity mActivity;
-
-        private SupportDialogCompatImpl(FragmentActivity activity) {
-            mActivity = activity;
-        }
-
-        @Override
-        public void showMediaTypes() {
-            android.support.v4.app.FragmentManager fm = mActivity.getSupportFragmentManager();
-            ActivityUtils.remove(fm, TAG_MIME_TYPES);
-            ActivityUtils.remove(fm, TAG_RESOLVES);
-            io.julian.appchooser.module.mediatypes.v4.MediaTypesDialogFragment.newInstance()
-                    .show(fm, TAG_MIME_TYPES);
-        }
-
-        @Override
-        public void showResolvers(List<Resolver> resolvers) {
-            android.support.v4.app.FragmentManager fm = mActivity.getSupportFragmentManager();
-            ActivityUtils.remove(fm, TAG_MIME_TYPES);
-            ActivityUtils.remove(fm, TAG_RESOLVES);
-            io.julian.appchooser.module.resolvers.v4.ResolversDialogFragment.newInstance(resolvers)
-                    .show(fm, TAG_RESOLVES);
-        }
-
-        @Override
-        public void hideResolvers() {
-            android.support.v4.app.FragmentManager fm = mActivity.getSupportFragmentManager();
-            ActivityUtils.remove(fm, TAG_MIME_TYPES);
-            ActivityUtils.remove(fm, TAG_RESOLVES);
+    @Override
+    public void showDisplayings() {
+        if (mActivity instanceof AppCompatActivity) {
+            io.julian.appchooser.module.resolvers.v4.ResolversFragment
+                    .newInstance(mFile, mRequestCode, mExcluded)
+                    .show(((AppCompatActivity) mActivity).getSupportFragmentManager(),
+                            TAG_DISPLAYINGS);
+        } else {
+            ResolversFragment.newInstance(mFile, mRequestCode, mExcluded)
+                    .show(mActivity.getFragmentManager(), TAG_DISPLAYINGS);
         }
     }
 
-    private static class HCDialogCompatImpl implements DialogCompatImpl {
+    @Override
+    public void setPresenter(@NonNull AppChooserContract.Presenter presenter) {
 
-        private Activity mActivity;
-
-        private HCDialogCompatImpl(Activity activity) {
-            mActivity = activity;
-        }
-
-        @Override
-        public void showMediaTypes() {
-            FragmentManager fm = mActivity.getFragmentManager();
-            ActivityUtils.remove(fm, TAG_MIME_TYPES);
-            ActivityUtils.remove(fm, TAG_RESOLVES);
-            MediaTypesDialogFragment.newInstance().show(fm, TAG_MIME_TYPES);
-        }
-
-        @Override
-        public void showResolvers(List<Resolver> resolvers) {
-            FragmentManager fm = mActivity.getFragmentManager();
-            ActivityUtils.remove(fm, TAG_MIME_TYPES);
-            ActivityUtils.remove(fm, TAG_RESOLVES);
-            ResolversDialogFragment.newInstance(resolvers).show(fm, TAG_RESOLVES);
-        }
-
-        @Override
-        public void hideResolvers() {
-            FragmentManager fm = mActivity.getFragmentManager();
-            ActivityUtils.remove(fm, TAG_MIME_TYPES);
-            ActivityUtils.remove(fm, TAG_RESOLVES);
-        }
     }
 }

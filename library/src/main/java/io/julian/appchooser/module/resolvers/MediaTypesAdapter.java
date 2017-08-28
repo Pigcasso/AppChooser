@@ -1,4 +1,4 @@
-package io.julian.appchooser.module.mediatypes;
+package io.julian.appchooser.module.resolvers;
 
 import android.content.Context;
 import android.view.View;
@@ -6,7 +6,6 @@ import android.view.View;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.julian.appchooser.R;
@@ -20,12 +19,12 @@ import static io.julian.common.Preconditions.checkNotNull;
  * @since 2017/4/15 下午9:35
  */
 
-class MediaTypesAdapter extends CommonAdapter<MediaType> {
+public class MediaTypesAdapter extends CommonAdapter<MediaType> {
 
     private OnMediaTypesListener mOnMediaTypesListener;
 
-    MediaTypesAdapter(Context context, OnMediaTypesListener onMediaTypesListener) {
-        super(context, R.layout.item_media_type, new ArrayList<MediaType>());
+    public MediaTypesAdapter(Context context, List<MediaType> datas, OnMediaTypesListener onMediaTypesListener) {
+        super(context, R.layout.item_media_type, datas);
         mOnMediaTypesListener = checkNotNull(onMediaTypesListener);
     }
 

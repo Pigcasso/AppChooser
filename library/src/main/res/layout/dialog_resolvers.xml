@@ -5,17 +5,18 @@
               android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_resolvers_list"
+        android:id="@+id/recycler_resolvers_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
     <FrameLayout
+        android:id="@+id/frame_resolvers_check_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <CheckBox
-            android:id="@+id/check_box_resolvers_set_as_default"
+            android:id="@+id/check_resolvers_set_as_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

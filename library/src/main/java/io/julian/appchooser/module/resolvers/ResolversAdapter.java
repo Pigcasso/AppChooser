@@ -20,14 +20,14 @@ import static io.julian.common.Preconditions.checkNotNull;
  * @version 1.0
  * @since 2017/4/16 上午11:50
  */
-class ResolversAdapter extends CommonAdapter<Resolver> {
+public class ResolversAdapter extends CommonAdapter<Resolver> {
 
     @NonNull
     private OnResolversListener mOnResolversListener;
     @NonNull
     private PackageManager mPackageManager;
 
-    ResolversAdapter(Context context, List<Resolver> datas, OnResolversListener onResolversListener) {
+    public ResolversAdapter(Context context, List<Resolver> datas, OnResolversListener onResolversListener) {
         super(context, R.layout.item_resolver, datas);
         mPackageManager = context.getPackageManager();
         mOnResolversListener = checkNotNull(onResolversListener);
