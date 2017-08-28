@@ -29,6 +29,6 @@ ext.deps = [
 
         // julian
         juliancommon       : 'io.julian:common:1.0.10',
-        julianmvp          : 'io.julian:mvp:1.0.8'
+        julianmvp          : 'io.julian:mvp:1.0.9'
 
 ]

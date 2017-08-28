@@ -27,7 +27,6 @@ import io.julian.appchooser.data.ActivityInfo;
 import io.julian.appchooser.data.MediaType;
 import io.julian.appchooser.data.Resolver;
 import io.julian.appchooser.exception.AppChooserException;
-import io.julian.appchooser.module.base.v4.BaseDialogFragment;
 import io.julian.appchooser.module.resolvers.MediaTypesAdapter;
 import io.julian.appchooser.module.resolvers.OnMediaTypesListener;
 import io.julian.appchooser.module.resolvers.OnResolversListener;
@@ -36,6 +35,7 @@ import io.julian.appchooser.module.resolvers.ResolversConsts;
 import io.julian.appchooser.module.resolvers.ResolversContract;
 import io.julian.appchooser.module.resolvers.ResolversPresenter;
 import io.julian.appchooser.util.MimeTypeUtils;
+import io.julian.mvp.v4.BaseDialogFragment;
 
 import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 

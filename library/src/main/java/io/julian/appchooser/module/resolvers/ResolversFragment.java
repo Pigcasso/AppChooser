@@ -27,8 +27,8 @@ import io.julian.appchooser.data.ActivityInfo;
 import io.julian.appchooser.data.MediaType;
 import io.julian.appchooser.data.Resolver;
 import io.julian.appchooser.exception.AppChooserException;
-import io.julian.appchooser.module.base.BaseDialogFragment;
 import io.julian.appchooser.util.MimeTypeUtils;
+import io.julian.mvp.BaseDialogFragment;
 
 import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 
