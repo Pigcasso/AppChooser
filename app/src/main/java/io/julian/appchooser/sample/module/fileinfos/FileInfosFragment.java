@@ -20,6 +20,7 @@ import io.julian.appchooser.sample.R;
 import io.julian.appchooser.sample.SampleInjection;
 import io.julian.appchooser.sample.data.FileInfo;
 import io.julian.common.Preconditions;
+import io.julian.common.widget.LoadingLayout;
 
 public class FileInfosFragment extends Fragment implements FileInfosContract.View {
 
@@ -75,7 +76,7 @@ public class FileInfosFragment extends Fragment implements FileInfosContract.Vie
         super.onPause();
         mPresenter.unsubscribe();
     }
-    
+
     @Override
     public void setPresenter(FileInfosContract.Presenter presenter) {
         mPresenter = presenter;
@@ -83,12 +84,21 @@ public class FileInfosFragment extends Fragment implements FileInfosContract.Vie
 
     @Override
     public void showFileInfos(List<FileInfo> fileInfos) {
+        if (getView() == null) {
+            return;
+        }
+        LoadingLayout loadingLayout = (LoadingLayout) getView().findViewById(R.id.loadingLayout);
+        loadingLayout.setStatus(LoadingLayout.SUCCESS);
         mAdapter.replaceDatas(fileInfos);
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showNoFileInfos() {
-
+        if (getView() == null) {
+            return;
+        }
+        LoadingLayout loadingLayout = (LoadingLayout) getView().findViewById(R.id.loadingLayout);
+        loadingLayout.setStatus(LoadingLayout.EMPTY);
     }
 }

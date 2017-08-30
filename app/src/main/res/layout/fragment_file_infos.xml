@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
+<io.julian.common.widget.LoadingLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/recycler_view_file_infos"
+    android:id="@+id/loadingLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.julian.appchooser.sample.module.fileinfos.FileInfosFragment"/>
+    tools:context="io.julian.appchooser.sample.module.fileinfos.FileInfosFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_file_infos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</io.julian.common.widget.LoadingLayout>
 
