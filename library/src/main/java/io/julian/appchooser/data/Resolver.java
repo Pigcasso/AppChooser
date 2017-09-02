@@ -78,6 +78,14 @@ public class Resolver implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return "Resolver{" +
+                "mResolveInfo=" + mResolveInfo +
+                ", mIsDefault=" + mIsDefault +
+                '}';
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }

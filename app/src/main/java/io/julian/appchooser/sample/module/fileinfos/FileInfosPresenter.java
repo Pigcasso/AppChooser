@@ -6,7 +6,7 @@ import java.util.List;
 
 import io.julian.appchooser.sample.data.FileInfo;
 import io.julian.appchooser.sample.data.FileInfosRepository;
-import io.julian.appchooser.util.schedulers.BaseSchedulerProvider;
+import io.julian.mvp.util.schedulers.BaseSchedulerProvider;
 import rx.functions.Action1;
 
 import static io.julian.common.Preconditions.checkArgument;

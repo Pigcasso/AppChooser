@@ -8,8 +8,8 @@ import io.julian.appchooser.data.MediaTypesRepository;
 import io.julian.appchooser.data.ResolversRepository;
 import io.julian.appchooser.data.local.ActivityInfosSharedPreferencesDataSource;
 import io.julian.appchooser.data.local.MediaTypesLocalDataSource;
-import io.julian.appchooser.util.schedulers.BaseSchedulerProvider;
-import io.julian.appchooser.util.schedulers.SchedulerProvider;
+import io.julian.mvp.util.schedulers.BaseSchedulerProvider;
+import io.julian.mvp.util.schedulers.SchedulerProvider;
 
 /**
  * @author Zhu Liang

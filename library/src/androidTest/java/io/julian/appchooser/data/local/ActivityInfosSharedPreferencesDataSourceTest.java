@@ -19,7 +19,7 @@ public class ActivityInfosSharedPreferencesDataSourceTest extends BaseActivityIn
     @NonNull
     @Override
     ActivityInfosDataSource getDataSource() {
-        return ActivityInfosSharedPreferencesDataSource.getInstance(
+        return new ActivityInfosSharedPreferencesDataSource(
                 InstrumentationRegistry.getContext().getApplicationContext());
     }
 }

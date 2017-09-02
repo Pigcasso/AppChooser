@@ -1,7 +1,7 @@
 package io.julian.appchooser;
 
 import io.julian.appchooser.data.ActivityInfosRepository;
-import io.julian.appchooser.util.schedulers.BaseSchedulerProvider;
+import io.julian.mvp.util.schedulers.BaseSchedulerProvider;
 import rx.Observable;
 import rx.Subscriber;
 

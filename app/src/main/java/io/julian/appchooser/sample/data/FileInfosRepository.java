@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import java.io.File;
 import java.util.List;
 
-import io.julian.appchooser.util.schedulers.BaseSchedulerProvider;
 import io.julian.common.Preconditions;
+import io.julian.mvp.util.schedulers.BaseSchedulerProvider;
 import rx.Observable;
 import rx.functions.Func1;
 

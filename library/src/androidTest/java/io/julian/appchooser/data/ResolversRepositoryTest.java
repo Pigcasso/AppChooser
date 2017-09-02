@@ -10,11 +10,16 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.util.List;
+
+import rx.Observable;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * @author Zhu Liang
@@ -25,9 +30,15 @@ import java.util.List;
 public class ResolversRepositoryTest {
 
     private static final String TAG = ResolversRepositoryTest.class.getSimpleName();
+    private ResolversRepository mResolversRepository;
+
+    @Before
+    public void setUp() throws Exception {
+        mResolversRepository = new ResolversRepository(InstrumentationRegistry.getTargetContext());
+    }
 
     @Test
-    public void testQueryIntentActivities() throws Exception {
+    public void testQueryActionViewIntentActivities() throws Exception {
         File txt = new File("/test.txt");
         Uri uri = Uri.fromFile(txt);
         // 获取扩展名
@@ -47,6 +58,27 @@ public class ResolversRepositoryTest {
         for (ResolveInfo resolver : resolvers) {
             Log.d(TAG, resolver.activityInfo.packageName + "\n" + resolver.activityInfo.name);
         }
+    }
+
+    @Test
+    public void testQueryActionSendIntentActivities() throws Exception {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+        mResolversRepository.listResolvers(sendIntent)
+                .flatMap(new Func1<List<Resolver>, Observable<Resolver>>() {
+                    @Override
+                    public Observable<Resolver> call(List<Resolver> resolvers) {
+                        return Observable.from(resolvers);
+                    }
+                })
+                .subscribe(new Action1<Resolver>() {
+                    @Override
+                    public void call(Resolver resolver) {
+                        Log.d(TAG, "call: " + resolver);
+                    }
+                });
     }
 
     @Test
