@@ -1,101 +1,66 @@
 package io.julian.appchooser;
 
-import android.app.Activity;
-import android.content.ComponentName;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.lang.ref.WeakReference;
 
-import io.julian.appchooser.module.resolvers.ResolversFragment;
-import io.julian.common.Preconditions;
+import io.julian.appchooser.action.SendAction;
+import io.julian.appchooser.action.ViewAction;
 
 /**
  * @author Zhu Liang
- * @version 1.0
- * @since 2017/4/14 上午9:36
  */
 
-public class AppChooser implements AppChooserContract.View {
+public final class AppChooser {
 
-    private static final String TAG_DISPLAYINGS = "tag_resolvers";
+    private WeakReference<FragmentActivity> mActivity;
+    private WeakReference<Fragment> mFragment;
 
-    private Activity mActivity;
-    private File mFile;
-    private int mRequestCode;
-    private ArrayList<ComponentName> mExcluded;
-    private AppChooserContract.Presenter mPresenter;
-
-    private AppChooser(@NonNull Activity activity) {
-        mActivity = Preconditions.checkNotNull(activity, "activity == null");
-        mPresenter = new AppChooserPresenter(Injection.provideSchedulerProvider(),
-                Injection.provideActivityInfosRepository(mActivity));
+    private AppChooser(FragmentActivity activity) {
+        this(activity, null);
     }
 
-    public static AppChooser with(Activity activity) {
+    private AppChooser(Fragment fragment) {
+        this(fragment.getActivity(), fragment);
+    }
+
+    private AppChooser(FragmentActivity activity, Fragment fragment) {
+        mActivity = new WeakReference<>(activity);
+        mFragment = new WeakReference<>(fragment);
+    }
+
+    public static AppChooser from(FragmentActivity activity) {
         return new AppChooser(activity);
     }
 
-    public AppChooser file(File file) {
-        Preconditions.checkNotNull(file, "file == null");
-        Preconditions.checkArgument(file.exists(), file.getName() + " does not exist");
-        Preconditions.checkArgument(file.isFile(), file.getName() + " is not file");
-
-        mFile = file;
-        return this;
+    public static AppChooser from(Fragment fragment) {
+        return new AppChooser(fragment);
     }
 
-    public AppChooser requestCode(int requestCode) {
-        mRequestCode = requestCode;
-        return this;
+    public SendAction text(String text) {
+        return new SendAction(this).text(text);
     }
 
-    public AppChooser excluded(ComponentName... componentNames) {
-        if (componentNames != null) {
-            mExcluded = new ArrayList<>(Arrays.asList(componentNames));
-        }
-        return this;
+    public ViewAction file(File file) {
+        return new ViewAction(this).file(file);
     }
 
-    public void load() {
-        showDisplayings();
+    @Nullable
+    public FragmentActivity getActivity() {
+        return mActivity.get();
+    }
+
+    @Nullable
+    public Fragment getFragment() {
+        return mFragment == null ? null : mFragment.get();
     }
 
     public void cleanDefaults() {
-        if (mPresenter != null) {
-            mPresenter.cleanAllActivityInfos();
+        if (mActivity != null) {
+            Injection.provideActivityInfosRepository(mActivity.get()).deleteAllActivityInfos();
         }
-    }
-
-    public void bind() {
-        if (mPresenter != null) {
-            mPresenter.subscribe();
-        }
-    }
-
-    public void unbind() {
-        if (mPresenter != null) {
-            mPresenter.unsubscribe();
-        }
-    }
-
-    @Override
-    public void showDisplayings() {
-        if (mActivity instanceof AppCompatActivity) {
-            io.julian.appchooser.module.resolvers.v4.ResolversFragment
-                    .newInstance(mFile, mRequestCode, mExcluded)
-                    .show(((AppCompatActivity) mActivity).getSupportFragmentManager(),
-                            TAG_DISPLAYINGS);
-        } else {
-            ResolversFragment.newInstance(mFile, mRequestCode, mExcluded)
-                    .show(mActivity.getFragmentManager(), TAG_DISPLAYINGS);
-        }
-    }
-
-    @Override
-    public void setPresenter(@NonNull AppChooserContract.Presenter presenter) {
-
     }
 }

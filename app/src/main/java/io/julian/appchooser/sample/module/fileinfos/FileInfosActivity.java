@@ -2,6 +2,7 @@ package io.julian.appchooser.sample.module.fileinfos;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -17,13 +18,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,7 +32,6 @@ import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -62,7 +60,7 @@ public class FileInfosActivity extends AppCompatActivity {
     private @interface Operation {
     }
 
-    private AppChooser mAppChooser;
+//    private AppChooser mAppChooser;
 
     ComponentName[] excluded = new ComponentName[]{
             new ComponentName("nutstore.android", "nutstore.android.SendToNutstoreIndex"),
@@ -77,6 +75,11 @@ public class FileInfosActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
 
     private MyHandler mMyHandler;
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, FileInfosActivity.class);
+        context.startActivity(starter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +99,10 @@ public class FileInfosActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
-        }
+        }*/
 
         mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -119,7 +122,7 @@ public class FileInfosActivity extends AppCompatActivity {
             }
         });
 
-        mAppChooser = AppChooser.with(this).excluded(excluded);
+//        mAppChooser = AppChooser.with(this).excluded(excluded);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -152,14 +155,14 @@ public class FileInfosActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        mAppChooser.bind();
+//        mAppChooser.bind();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        mAppChooser.unbind();
+//        mAppChooser.unbind();
     }
 
     @Override
@@ -178,9 +181,8 @@ public class FileInfosActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (RESULT_OK == resultCode
-                && REQUEST_CODE_OPEN_FILE == requestCode) {
-            Toast.makeText(this, data.getData().getPath(), Toast.LENGTH_SHORT).show();
+        if (requestCode == REQUEST_CODE_OPEN_FILE) {
+            Log.d(TAG, "onActivityResult: " + requestCode + "," + resultCode + "," + data);
         }
     }
 
@@ -194,7 +196,7 @@ public class FileInfosActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_file_infos_clear_defaults:
-                mAppChooser.cleanDefaults();
+                AppChooser.from(this).cleanDefaults();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -215,7 +217,11 @@ public class FileInfosActivity extends AppCompatActivity {
     }
 
     private void showFile(FileInfo file) {
-        mAppChooser.file(new File(file.getAbsolutePath())).requestCode(REQUEST_CODE_OPEN_FILE).load();
+        AppChooser.from(this)
+                .file(new File(file.getAbsolutePath()))
+                .excluded(excluded)
+                .requestCode(REQUEST_CODE_OPEN_FILE)
+                .load();
     }
 
     private void showDirectory(FileInfo fileInfo, @Operation int operation) {
@@ -445,11 +451,7 @@ public class FileInfosActivity extends AppCompatActivity {
             Method method = TabLayout.class.getDeclaredMethod("selectTab", TabLayout.Tab.class);
             method.setAccessible(true);
             method.invoke(mTabLayout, tab);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

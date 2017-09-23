@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">应用选择器</string>
-
     <string name="app_chooser_failed_to_open_file">%s 打开失败</string>
     <string name="app_chooser_did_not_find_an_app_that_can_open_this_file">没有找到能打开%s的应用</string>
 
@@ -18,4 +16,14 @@
         <item>图片</item>
         <item>其他</item>
     </string-array>
+
+    <!--View-->
+    <string name="view_set_as_the_default_app">设置为默认应用</string>
+    <string name="view_title">选择</string>
+    <string name="view_no_apps_can_open_this_file">没有应用可以打开这个文件</string>
+
+    <!--Send-->
+    <string name="send_title">分享</string>
+    <string name="send_no_apps_can_share_text">没有应用可以分享</string>
+
 </resources>

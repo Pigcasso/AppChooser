@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 import io.julian.appchooser.sample.data.FileInfo;
 import io.julian.appchooser.sample.data.FileInfosDataSource;
 import io.julian.appchooser.sample.data.FileInfosRepository;
-import io.julian.appchooser.util.schedulers.ImmediateSchedulerProvider;
+import io.julian.mvp.util.schedulers.ImmediateSchedulerProvider;
 import rx.Observable;
 
 /**

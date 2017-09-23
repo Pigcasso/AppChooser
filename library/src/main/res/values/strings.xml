@@ -1,7 +1,5 @@
 <resources>
 
-    <string name="app_name">App Chooser</string>
-
     <string name="app_chooser_failed_to_open_file">Failed to open %s</string>
     <string name="app_chooser_did_not_find_an_app_that_can_open_this_file">Did not find an application that can open %s</string>
 
@@ -25,5 +23,14 @@
         <item>Image</item>
         <item>Other</item>
     </string-array>
+
+    <!--View-->
+    <string name="view_set_as_the_default_app">Set as the default app</string>
+    <string name="view_title">Select</string>
+    <string name="view_no_apps_can_open_this_file">No applications can open this file</string>
+
+    <!--Send-->
+    <string name="send_title">Share Via</string>
+    <string name="send_no_apps_can_share_text">No applications can share the text</string>
 
 </resources>

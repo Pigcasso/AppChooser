@@ -33,4 +33,5 @@ dependencies {
     compile project(':library')
     compile deps.supportappcompat
     compile deps.supportdesign
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
