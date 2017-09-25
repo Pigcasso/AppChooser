@@ -23,8 +23,8 @@ task clean(type: Delete) {
 }
 
 ext {
-    versionCode = 10
-    versionName = "1.2.0"
+    versionCode = 11
+    versionName = "2.0.0"
 }
 
 apply from: 'common_config.gradle'
