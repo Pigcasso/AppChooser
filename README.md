@@ -1,4 +1,5 @@
 # AppChooser
+[TOC]
 ## 描述
 自定义打开指定文件的应用选择器。
 ## 起因
@@ -13,7 +14,12 @@
 
 ## 依赖
 
-`compile 'io.julian:appchooser:1.2.0'`
+`compile 'io.julian:appchooser:2.0.0'`
+
+## 2.0.0 特性
+- 重构项目，提高可扩展性
+- 支持[Intent.ACTION_SEND](https://developer.android.com/training/sharing/send.html)分享文本
+- 允许[Intent.ACTION_SEND](https://developer.android.com/training/sharing/send.html)过滤组件
 
 ## 1.2.0 特性
 - 修复弹出应用选择器后旋转屏幕不能使用选择的打开方式打开文件的bug。
@@ -43,73 +49,42 @@ context.startActivity(intent);
 修复bug：如果设置某个Activity为某类型文件的默认打开方式，然后将这个Activity所属的App卸载，再次点击这种类型的文件会导致App闪退。
 
 ## 使用方法
-
+### 打开文件
 在Activity或Fragment中：
 
 ```java
-@NonNull
-private AppChooser mAppChooser;
-
-// 屏蔽掉下面的组件，将不会显示在备选打开方式列表中
-ComponentName[] excluded = new ComponentName[]{
-        new ComponentName("nutstore.android", "nutstore.android.SendToNutstoreIndex"),
-        new ComponentName("nutstore.android.debug", "nutstore.android.SendToNutstoreIndex"),
-};
-
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_file_infos);
-  	// 初始化 AppChooser
-    mAppChooser = AppChooser.with(this)
-    	excluded(excluded); 
+private void showFile(FileInfo file) {
+    AppChooser.from(this)
+      .file(new File(file.getAbsolutePath()))
+      .excluded(excluded)
+      .requestCode(REQUEST_CODE_OPEN_FILE)
+      .load();
 }
 
-@Override
-public void onStart() {
-    super.onStart();
-  	// 绑定 AppChooser
-    mAppChooser.bind();
-}
-@Override
-public void onStop() {
-    super.onStop();
-   	// 解绑 AppChooser
-    mAppChooser.unbind();
-}
-
-/**
- * 打开文件
- *
- * @param file 待打开的文件
- */
-private void showFile(@NonNull File file) {
-    // 检查文件非空
-    Preconditions.checkNotNull(file);
-    // 必须是文件
-    Preconditions.checkArgument(file.isFile());
-    mAppChooser.file(file).load();
-}
-/**
- * 打开文件并将编辑的结果回传给 Activity 或 Fragment
- *
- * @param file 待打开的文件
- * @see android.app.Activity#onActivityResult(int, int, Intent)
- * @see android.support.v4.app.Fragment#onActivityResult(int, int, Intent)
- */
-private void modifyFile(@NonNull File file) {
-    // 检查文件非空
-    Preconditions.checkNotNull(file);
-    // 必须是文件
-    Preconditions.checkArgument(file.isFile());
-    mAppChooser.file(file).requestCode(REQUEST_CODE_MODIFY_FILE).load();
-}
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    if (resultCode == RESULT_OK
-            && requestCode == REQUEST_CODE_MODIFY_FILE) {
-        // 编辑结果的回调
+  	// 处理返回结果
+    if (requestCode == REQUEST_CODE_OPEN_FILE) {
+        Log.d(TAG, "onActivityResult: " + requestCode + "," + resultCode + "," + data);
     }
 }
 ```
+### 分享文本
+在`Activity`或`Fragment`中：
+
+``` java
+public void onShareClick(View view) {
+    EditText editText = (EditText) findViewById(R.id.edit_text);
+    if (editText != null) {
+        CharSequence shareContent = editText.getText();
+        AppChooser
+          .from(this)
+          .text(shareContent.toString())
+          .excluded(mComponentNames)
+          .load();
+    }
+}
+```
+
+
