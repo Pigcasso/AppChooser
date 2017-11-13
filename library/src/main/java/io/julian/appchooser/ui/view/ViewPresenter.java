@@ -23,7 +23,6 @@ import io.julian.mvp.util.schedulers.BaseSchedulerProvider;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -172,23 +171,13 @@ class ViewPresenter extends ResolveInfosPresenter<ViewContract.View> implements 
                             public void call(List<ResolveInfo> resolveInfos) {
                                 if (resolveInfos == null || resolveInfos.isEmpty()) {
                                     mView.showNoResolveInfos();
+                                    mView.dismissDialog();
                                 } else if (resolveInfos.size() == 1) {
                                     openResolveInfo(resolveInfos.get(0));
                                 } else {
+                                    mView.setLoadingIndicator(false);
                                     mView.showResolveInfos(resolveInfos);
                                 }
-                            }
-                        },
-                        new Action1<Throwable>() {
-                            @Override
-                            public void call(Throwable throwable) {
-
-                            }
-                        },
-                        new Action0() {
-                            @Override
-                            public void call() {
-                                mView.setLoadingIndicator(false);
                             }
                         });
         mSubscriptions.add(subscription);
