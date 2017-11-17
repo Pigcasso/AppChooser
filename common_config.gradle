@@ -1,10 +1,10 @@
 project.ext {
 
     // Android编译版本相关
-    compileSdkVersion = 23
-    buildToolsVersion = '23.0.3'
-    minSdkVersion = 14
-    targetSdkVersion = 23
+    compileSdkVersion = 24
+    buildToolsVersion = '24.0.2'
+    minSdkVersion = 17
+    targetSdkVersion = 19
 }
 
 ext.deps = [
