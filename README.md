@@ -6,17 +6,26 @@
 我司主营企业版云存储服务，在一段时间里经常有用户反馈点击某个文件会自动跳转到手机系统自带APP（大多是音乐播放器）的问题。结果发现是手机厂商Rom修改了底层逻辑导致的，为了绕过这个bug，只能在应用内自己实现选择器。
 
 ## 下载
-[Download latest release](https://github.com/JulianAndroid/AppChooser/releases/tag/v1.1.1)
+[Download latest release](https://github.com/JulianAndroid/AppChooser/releases/tag/v2.0.1)
 
 ## 效果图
 
-![](screenshots/Gif_20170624_154149.gif)
+![其他应用打开打开文件](screenshots/Gif_20171117_095658.gif)
+
+
+
+![分享文字到其他应用](screenshots/Gif_20171117_095855.gif)
 
 ## 依赖
 
-`compile 'io.julian:appchooser:2.0.0'`
+`compile 'io.julian:appchooser:2.0.1'`
+
+## 2.0.1 特性
+
+- 修复没有能打开文件的应用时显示空列表的bug
 
 ## 2.0.0 特性
+
 - 重构项目，提高可扩展性
 - 支持[Intent.ACTION_SEND](https://developer.android.com/training/sharing/send.html)分享文本
 - 允许[Intent.ACTION_SEND](https://developer.android.com/training/sharing/send.html)过滤组件
