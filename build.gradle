@@ -27,6 +27,35 @@ task clean(type: Delete) {
 ext {
     versionCode = 12
     versionName = "2.0.1"
+
+    compileSdkVersion = 27
+    buildToolsVersion = '27.0.3'
+    minSdkVersion = 17
+    targetSdkVersion = 27
 }
 
-apply from: 'common_config.gradle'
+ext.deps = [
+        // Test Compile
+        junit              : 'junit:junit:4.12',
+        mockitocore        : 'org.mockito:mockito-core:1.10.19',
+
+        // support
+        support            : 'com.android.support:support-v4:23.4.0',
+        supportrecyclerview: 'com.android.support:recyclerview-v7:23.4.0',
+        supportappcompat   : 'com.android.support:appcompat-v7:23.4.0',
+        supportdesign      : 'com.android.support:design:23.4.0',
+
+        // rxjava
+        rxjava             : 'io.reactivex:rxjava:1.2.5',
+        rxandroid          : 'io.reactivex:rxandroid:1.2.1',
+
+        // greenrobot
+        eventbus           : 'org.greenrobot:eventbus:3.0.0',
+
+        zhybaservadapter   : 'com.zhy:base-rvadapter:3.0.3',
+
+        // julian
+        juliancommon       : 'io.julian:common:1.0.10',
+        julianmvp          : 'io.julian:mvp:1.0.9'
+
+]
