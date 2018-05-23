@@ -6,7 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.runner.RunWith;
 
-import io.julian.appchooser.data.ActivityInfosDataSource;
+import io.zhuliang.appchooser.data.ActivityInfosDataSource;
+import io.zhuliang.appchooser.data.local.ActivityInfosSharedPreferencesDataSource;
 
 /**
  * @author Zhu Liang

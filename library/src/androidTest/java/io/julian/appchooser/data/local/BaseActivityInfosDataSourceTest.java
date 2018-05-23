@@ -8,8 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import io.julian.appchooser.data.ActivityInfo;
-import io.julian.appchooser.data.ActivityInfosDataSource;
+import io.zhuliang.appchooser.data.ActivityInfo;
+import io.zhuliang.appchooser.data.ActivityInfosDataSource;
 
 /**
  * @author Zhu Liang

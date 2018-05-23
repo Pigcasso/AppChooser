@@ -17,6 +17,8 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.util.List;
 
+import io.zhuliang.appchooser.data.Resolver;
+import io.zhuliang.appchooser.data.ResolversRepository;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
