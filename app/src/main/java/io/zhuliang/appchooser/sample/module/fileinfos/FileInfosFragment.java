@@ -13,14 +13,14 @@ import android.view.ViewGroup;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.julian.appchooser.sample.BuildConfig;
 import io.julian.appchooser.sample.R;
+import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.sample.SampleInjection;
 import io.zhuliang.appchooser.sample.data.FileInfo;
-import io.julian.common.Preconditions;
-import io.julian.common.widget.LoadingLayout;
 
 public class FileInfosFragment extends Fragment implements FileInfosContract.View {
 
@@ -87,18 +87,13 @@ public class FileInfosFragment extends Fragment implements FileInfosContract.Vie
         if (getView() == null) {
             return;
         }
-        LoadingLayout loadingLayout = (LoadingLayout) getView().findViewById(R.id.loadingLayout);
-        loadingLayout.setStatus(LoadingLayout.SUCCESS);
         mAdapter.replaceDatas(fileInfos);
         mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void showNoFileInfos() {
-        if (getView() == null) {
-            return;
-        }
-        LoadingLayout loadingLayout = (LoadingLayout) getView().findViewById(R.id.loadingLayout);
-        loadingLayout.setStatus(LoadingLayout.EMPTY);
+        mAdapter.replaceDatas(Collections.EMPTY_LIST);
+        mAdapter.notifyDataSetChanged();
     }
 }

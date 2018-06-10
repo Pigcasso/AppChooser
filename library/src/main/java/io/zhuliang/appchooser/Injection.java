@@ -8,8 +8,8 @@ import io.zhuliang.appchooser.data.MediaTypesRepository;
 import io.zhuliang.appchooser.data.ResolversRepository;
 import io.zhuliang.appchooser.data.local.ActivityInfosSharedPreferencesDataSource;
 import io.zhuliang.appchooser.data.local.MediaTypesLocalDataSource;
-import io.julian.mvp.util.schedulers.BaseSchedulerProvider;
-import io.julian.mvp.util.schedulers.SchedulerProvider;
+import io.zhuliang.appchooser.util.schedulers.BaseSchedulerProvider;
+import io.zhuliang.appchooser.util.schedulers.SchedulerProvider;
 
 /**
  * @author Zhu Liang

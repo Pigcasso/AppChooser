@@ -8,7 +8,7 @@ import java.util.List;
 import rx.Observable;
 import rx.functions.Action1;
 
-import static io.julian.common.Preconditions.checkNotNull;
+import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang

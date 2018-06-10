@@ -38,8 +38,8 @@ import java.util.Iterator;
 
 import io.zhuliang.appchooser.AppChooser;
 import io.julian.appchooser.sample.R;
+import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.sample.data.FileInfo;
-import io.julian.common.Preconditions;
 
 public class FileInfosActivity extends AppCompatActivity {
     private static final String TAG = FileInfosActivity.class.getSimpleName();

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.SharedPreferencesCompat;
 
 import java.util.Map;
 
@@ -13,7 +12,7 @@ import io.zhuliang.appchooser.data.ActivityInfo;
 import io.zhuliang.appchooser.data.ActivityInfosDataSource;
 import rx.Observable;
 
-import static io.julian.common.Preconditions.checkNotNull;
+import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang
@@ -40,8 +39,7 @@ public class ActivityInfosSharedPreferencesDataSource implements ActivityInfosDa
         String cls = checkNotNull(activityInfo.getCls());
 
         SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putString(mimeType, String.format("%s|%s", pkg, cls));
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+        editor.putString(mimeType, String.format("%s|%s", pkg, cls)).apply();
     }
 
     @NonNull
@@ -64,8 +62,7 @@ public class ActivityInfosSharedPreferencesDataSource implements ActivityInfosDa
         } else {
             if (mPreferences.contains(mimeType)) {
                 SharedPreferences.Editor editor = mPreferences.edit();
-                editor.remove(mimeType);
-                SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+                editor.remove(mimeType).apply();
                 return 1;
             } else {
                 return 0;
@@ -79,9 +76,7 @@ public class ActivityInfosSharedPreferencesDataSource implements ActivityInfosDa
         if (map == null || map.size() == 0) {
             return 0;
         } else {
-            SharedPreferences.Editor editor = mPreferences.edit();
-            editor.clear();
-            SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+            mPreferences.edit().clear().apply();
             return map.size();
         }
     }

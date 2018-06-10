@@ -6,7 +6,8 @@ import android.support.annotation.NonNull;
 
 import java.io.File;
 
-import io.julian.common.Preconditions;
+import io.zhuliang.appchooser.internal.Preconditions;
+
 
 /**
  * @author Zhu Liang

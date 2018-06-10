@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<io.julian.common.widget.LoadingLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/loadingLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="io.zhuliang.appchooser.sample.module.fileinfos.FileInfosFragment">
@@ -10,6 +9,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_file_infos"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</io.julian.common.widget.LoadingLayout>
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
 

@@ -12,7 +12,7 @@ import io.zhuliang.appchooser.data.MediaType;
 import io.zhuliang.appchooser.data.MediaTypesDataSource;
 import rx.Observable;
 
-import static io.julian.common.Preconditions.checkNotNull;
+import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang

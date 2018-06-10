@@ -9,7 +9,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import static io.julian.common.Preconditions.checkNotNull;
+import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang

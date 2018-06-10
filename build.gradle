@@ -50,7 +50,4 @@ ext {
     eventbusVersion  = '3.0.0'
 
     baservadapterVersion = '3.0.3'
-
-    juliancommon = '1.0.10'
-    julianmvp = '1.0.9'
 }

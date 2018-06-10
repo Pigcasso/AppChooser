@@ -45,9 +45,6 @@ dependencies {
     compile "io.reactivex:rxjava:$rootProject.ext.rxjava"
     compile "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
     compile "com.zhy:base-rvadapter:$rootProject.ext.baservadapterVersion"
-    compile "org.greenrobot:eventbus:$rootProject.ext.eventbusVersion"
-    compile "io.julian:common:$rootProject.ext.juliancommon"
-    compile "io.julian:mvp:$rootProject.ext.julianmvp"
 }
 
 publish {

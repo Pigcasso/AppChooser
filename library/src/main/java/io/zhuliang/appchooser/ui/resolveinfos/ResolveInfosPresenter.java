@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import io.zhuliang.appchooser.action.ActionConfig;
 import io.zhuliang.appchooser.data.ActivityInfo;
 import io.zhuliang.appchooser.data.ResolveInfosRepository;
-import io.julian.mvp.util.schedulers.BaseSchedulerProvider;
+import io.zhuliang.appchooser.util.schedulers.BaseSchedulerProvider;
 import rx.subscriptions.CompositeSubscription;
 
 /**

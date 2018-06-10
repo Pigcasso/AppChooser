@@ -34,4 +34,5 @@ dependencies {
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportSdkVersion"
     compile "com.android.support:design:$rootProject.ext.supportSdkVersion"
     compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
+    compile "org.greenrobot:eventbus:$rootProject.ext.eventbusVersion"
 }

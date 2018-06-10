@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import io.julian.mvp.util.schedulers.BaseSchedulerProvider;
+import io.zhuliang.appchooser.util.schedulers.BaseSchedulerProvider;
 import rx.Observable;
 import rx.Subscriber;
 

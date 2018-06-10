@@ -30,7 +30,7 @@ import io.zhuliang.appchooser.data.MediaType;
 import io.zhuliang.appchooser.data.ResolveInfosRepository;
 import io.zhuliang.appchooser.ui.resolveinfos.ResolveInfosFragment;
 
-import static io.julian.common.Preconditions.checkNotNull;
+import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
 /**
  * @author Zhu Liang

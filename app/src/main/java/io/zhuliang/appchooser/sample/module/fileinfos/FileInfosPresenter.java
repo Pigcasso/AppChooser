@@ -4,13 +4,13 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import io.julian.mvp.util.schedulers.BaseSchedulerProvider;
 import io.zhuliang.appchooser.sample.data.FileInfo;
 import io.zhuliang.appchooser.sample.data.FileInfosRepository;
+import io.zhuliang.appchooser.util.schedulers.BaseSchedulerProvider;
 import rx.functions.Action1;
 
-import static io.julian.common.Preconditions.checkArgument;
-import static io.julian.common.Preconditions.checkNotNull;
+import static io.zhuliang.appchooser.internal.Preconditions.checkArgument;
+import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
 class FileInfosPresenter implements FileInfosContract.Presenter {
 

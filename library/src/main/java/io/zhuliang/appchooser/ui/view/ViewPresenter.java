@@ -19,7 +19,7 @@ import io.zhuliang.appchooser.data.ResolveInfosRepository;
 import io.zhuliang.appchooser.ui.resolveinfos.ResolveInfosPresenter;
 import io.zhuliang.appchooser.util.FileUtils;
 import io.zhuliang.appchooser.util.MimeType;
-import io.julian.mvp.util.schedulers.BaseSchedulerProvider;
+import io.zhuliang.appchooser.util.schedulers.BaseSchedulerProvider;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;

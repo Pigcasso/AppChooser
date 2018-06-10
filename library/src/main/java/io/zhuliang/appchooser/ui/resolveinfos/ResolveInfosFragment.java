@@ -15,8 +15,8 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.List;
 
-import io.julian.mvp.v4.BaseDialogFragment;
 import io.zhuliang.appchooser.R;
+import io.zhuliang.appchooser.ui.base.BaseDialogFragment;
 
 public abstract class ResolveInfosFragment<P extends ResolveInfosContract.Presenter>
         extends BaseDialogFragment<P> implements ResolveInfosContract.View<P> {

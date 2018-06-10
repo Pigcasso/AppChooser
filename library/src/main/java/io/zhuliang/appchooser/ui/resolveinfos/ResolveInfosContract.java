@@ -7,8 +7,8 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import io.julian.mvp.BaseDialogView;
-import io.julian.mvp.BasePresenter;
+import io.zhuliang.appchooser.ui.base.BaseDialogView;
+import io.zhuliang.appchooser.ui.base.BasePresenter;
 
 /**
  * @author Zhu Liang
