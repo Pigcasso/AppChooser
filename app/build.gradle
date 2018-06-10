@@ -21,17 +21,17 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':library')
 
-    testCompile deps.junit
-    testCompile deps.mockitocore
+    testCompile "junit:junit:$rootProject.ext.junitVersion"
+    testCompile "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
 
-    androidTestCompile deps.mockitocore
+    androidTestCompile "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile project(':library')
-    compile deps.supportappcompat
-    compile deps.supportdesign
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportSdkVersion"
+    compile "com.android.support:design:$rootProject.ext.supportSdkVersion"
+    compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
 }

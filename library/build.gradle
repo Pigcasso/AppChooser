@@ -31,23 +31,23 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    testCompile deps.junit
-    testCompile deps.mockitocore
+    testCompile "junit:junit:$rootProject.ext.junitVersion"
+    testCompile "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
 
-    androidTestCompile deps.mockitocore
+    androidTestCompile "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile deps.support
-    compile deps.rxjava
-    compile deps.rxandroid
-    compile deps.supportrecyclerview
-    compile deps.zhybaservadapter
-    compile deps.eventbus
-    compile deps.juliancommon
-    compile deps.julianmvp
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportSdkVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportSdkVersion"
+    compile "io.reactivex:rxjava:$rootProject.ext.rxjava"
+    compile "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
+    compile "com.zhy:base-rvadapter:$rootProject.ext.baservadapterVersion"
+    compile "org.greenrobot:eventbus:$rootProject.ext.eventbusVersion"
+    compile "io.julian:common:$rootProject.ext.juliancommon"
+    compile "io.julian:mvp:$rootProject.ext.julianmvp"
 }
 
 publish {
