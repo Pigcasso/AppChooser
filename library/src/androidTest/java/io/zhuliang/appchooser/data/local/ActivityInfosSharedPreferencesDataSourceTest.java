@@ -1,4 +1,4 @@
-package io.julian.appchooser.data.local;
+package io.zhuliang.appchooser.data.local;
 
 import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.runner.RunWith;
 
 import io.zhuliang.appchooser.data.ActivityInfosDataSource;
-import io.zhuliang.appchooser.data.local.ActivityInfosSharedPreferencesDataSource;
 
 /**
  * @author Zhu Liang

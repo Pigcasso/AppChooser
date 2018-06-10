@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import io.julian.appchooser.sample.R;
+import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.module.fileinfos.FileInfosActivity;
 import io.zhuliang.appchooser.sample.module.share.ShareActivity;
 

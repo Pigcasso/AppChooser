@@ -45,6 +45,12 @@ public class ViewAction {
         return this;
     }
 
+    public ViewAction authority(String authority) {
+        mActionConfig.authority = authority;
+        mActionConfig.isUriExposed = false;
+        return this;
+    }
+
     public void load() {
         FragmentActivity activity = mAppChooser.getActivity();
         if (activity == null) {

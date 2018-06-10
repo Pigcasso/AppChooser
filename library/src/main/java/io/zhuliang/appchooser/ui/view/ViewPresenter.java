@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 
 import java.io.File;
 import java.util.List;
@@ -230,7 +231,14 @@ class ViewPresenter extends ResolveInfosPresenter<ViewContract.View> implements 
         }
         Intent intent = new Intent(mActionConfig.actionName);
         intent.setComponent(new ComponentName(activityInfo.getPkg(), activityInfo.getCls()));
-        intent.setDataAndType(Uri.fromFile(new File(mActionConfig.pathname)), mActionConfig.mimeType);
+        // intent.setDataAndType(Uri.fromFile(new File(mActionConfig.pathname)), mActionConfig.mimeType);
+        Uri uri;
+        if (!mActionConfig.isUriExposed && mActionConfig.authority != null && mView.getContext() != null) {
+            uri = FileProvider.getUriForFile(mView.getContext(), mActionConfig.authority, new File(mActionConfig.pathname));
+        } else {
+            uri = Uri.fromFile(new File(mActionConfig.pathname));
+        }
+        intent.setDataAndType(uri, mActionConfig.mimeType);
         return intent;
     }
 

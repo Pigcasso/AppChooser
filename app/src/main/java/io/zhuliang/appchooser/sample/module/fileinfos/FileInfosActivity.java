@@ -37,8 +37,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import io.zhuliang.appchooser.AppChooser;
-import io.julian.appchooser.sample.R;
 import io.zhuliang.appchooser.internal.Preconditions;
+import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.data.FileInfo;
 
 public class FileInfosActivity extends AppCompatActivity {
@@ -221,6 +221,7 @@ public class FileInfosActivity extends AppCompatActivity {
                 .file(new File(file.getAbsolutePath()))
                 .excluded(excluded)
                 .requestCode(REQUEST_CODE_OPEN_FILE)
+                .authority("io.zhuliang.appchooser.sample.fileprovider")
                 .load();
     }
 

@@ -1,4 +1,4 @@
-package io.julian.appchooser.data.local;
+package io.zhuliang.appchooser.data.local;
 
 import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;

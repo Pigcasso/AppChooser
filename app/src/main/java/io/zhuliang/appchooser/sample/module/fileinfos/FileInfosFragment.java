@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.julian.appchooser.sample.BuildConfig;
-import io.julian.appchooser.sample.R;
+import io.zhuliang.appchooser.BuildConfig;
 import io.zhuliang.appchooser.internal.Preconditions;
+import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.SampleInjection;
 import io.zhuliang.appchooser.sample.data.FileInfo;
 

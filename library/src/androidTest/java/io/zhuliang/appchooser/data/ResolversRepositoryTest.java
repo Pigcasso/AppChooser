@@ -1,4 +1,4 @@
-package io.julian.appchooser.data;
+package io.zhuliang.appchooser.data;
 
 import android.content.Context;
 import android.content.Intent;

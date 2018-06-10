@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import io.zhuliang.appchooser.AppChooser;
-import io.julian.appchooser.sample.R;
+import io.zhuliang.appchooser.sample.R;
 
 public class ShareActivity extends AppCompatActivity {
 

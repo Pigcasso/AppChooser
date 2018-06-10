@@ -1,4 +1,4 @@
-package io.julian.appchooser;
+package io.zhuliang.appchooser;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

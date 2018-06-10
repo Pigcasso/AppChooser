@@ -10,7 +10,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-import io.julian.appchooser.sample.R;
+import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.data.FileInfo;
 
 /**
