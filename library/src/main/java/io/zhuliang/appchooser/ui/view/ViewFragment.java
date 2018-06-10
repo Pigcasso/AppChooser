@@ -28,7 +28,6 @@ import io.zhuliang.appchooser.R;
 import io.zhuliang.appchooser.action.ActionConfig;
 import io.zhuliang.appchooser.data.MediaType;
 import io.zhuliang.appchooser.data.ResolveInfosRepository;
-import io.zhuliang.appchooser.module.resolvers.OnMediaTypesListener;
 import io.zhuliang.appchooser.ui.resolveinfos.ResolveInfosFragment;
 
 import static io.julian.common.Preconditions.checkNotNull;

@@ -1,4 +1,4 @@
-package io.zhuliang.appchooser.module.resolvers;
+package io.zhuliang.appchooser.ui.view;
 
 import io.zhuliang.appchooser.data.MediaType;
 
