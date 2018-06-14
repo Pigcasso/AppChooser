@@ -3,6 +3,8 @@ package io.zhuliang.appchooser.sample.data;
 import android.support.annotation.NonNull;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.util.Arrays;
 import java.util.List;
 
 import io.zhuliang.appchooser.internal.Preconditions;
@@ -40,10 +42,16 @@ public class FileInfosRepository implements FileInfosDataSource {
                 .flatMap(new Func1<File, Observable<File>>() {
                     @Override
                     public Observable<File> call(File dir) {
-                        File[] files = dir.listFiles();
+                        File[] files = dir.listFiles(new FileFilter() {
+                            @Override
+                            public boolean accept(File pathname) {
+                                return !pathname.isHidden();
+                            }
+                        });
                         if (files == null) {
                             files = new File[0];
                         }
+                        Arrays.sort(files);
                         return Observable.from(files);
                     }
                 })
