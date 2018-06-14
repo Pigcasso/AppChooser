@@ -20,19 +20,22 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':library')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':library')
 
-    testCompile "junit:junit:$rootProject.ext.junitVersion"
-    testCompile "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
+    testImplementation "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
 
-    androidTestCompile "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportSdkVersion"
-    compile "com.android.support:design:$rootProject.ext.supportSdkVersion"
-    compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
-    compile "org.greenrobot:eventbus:$rootProject.ext.eventbusVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportSdkVersion"
+    implementation "com.android.support:design:$rootProject.ext.supportSdkVersion"
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
+    implementation "org.greenrobot:eventbus:$rootProject.ext.eventbusVersion"
+    implementation "io.reactivex:rxjava:$rootProject.ext.rxjava"
+    implementation "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
+    implementation "com.zhy:base-rvadapter:$rootProject.ext.baservadapterVersion"
 }

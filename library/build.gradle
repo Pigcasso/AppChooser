@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -29,29 +28,20 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testCompile "junit:junit:$rootProject.ext.junitVersion"
-    testCompile "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
+    testImplementation "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
 
-    androidTestCompile "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
+    androidTestImplementation "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportSdkVersion"
-    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportSdkVersion"
-    compile "io.reactivex:rxjava:$rootProject.ext.rxjava"
-    compile "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
-    compile "com.zhy:base-rvadapter:$rootProject.ext.baservadapterVersion"
-}
-
-publish {
-    userOrg = 'julianchu'
-    groupId = 'io.julian'
-    artifactId = 'appchooser'
-    publishVersion = rootProject.ext.versionName
-    desc = 'A library that filters the activities which supports to open the specified file.'
-    website = 'https://github.com/JulianAndroid/AppChooser'
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportSdkVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportSdkVersion"
+    implementation "io.reactivex:rxjava:$rootProject.ext.rxjava"
+    implementation "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
+    implementation "com.zhy:base-rvadapter:$rootProject.ext.baservadapterVersion"
 }
