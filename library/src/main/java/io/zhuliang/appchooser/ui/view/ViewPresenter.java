@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 
@@ -17,6 +18,7 @@ import io.zhuliang.appchooser.data.ActivityInfosRepository;
 import io.zhuliang.appchooser.data.MediaType;
 import io.zhuliang.appchooser.data.MediaTypesRepository;
 import io.zhuliang.appchooser.data.ResolveInfosRepository;
+import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.ui.resolveinfos.ResolveInfosPresenter;
 import io.zhuliang.appchooser.util.FileUtils;
 import io.zhuliang.appchooser.util.MimeType;
@@ -226,19 +228,17 @@ class ViewPresenter extends ResolveInfosPresenter<ViewContract.View> implements 
     }
 
     private Intent makeIntent(@NonNull ActivityInfo activityInfo) {
-        if (activityInfo == null) {
-            throw new NullPointerException("activityInfo == null");
-        }
+        Preconditions.checkNotNull(activityInfo);
         Intent intent = new Intent(mActionConfig.actionName);
         intent.setComponent(new ComponentName(activityInfo.getPkg(), activityInfo.getCls()));
-        // intent.setDataAndType(Uri.fromFile(new File(mActionConfig.pathname)), mActionConfig.mimeType);
-        Uri uri;
-        if (!mActionConfig.isUriExposed && mActionConfig.authority != null && mView.getContext() != null) {
-            uri = FileProvider.getUriForFile(mView.getContext(), mActionConfig.authority, new File(mActionConfig.pathname));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Uri uri = FileProvider.getUriForFile(mView.getContext(), mActionConfig.authority, new File(mActionConfig.pathname));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(uri, mActionConfig.mimeType);
         } else {
-            uri = Uri.fromFile(new File(mActionConfig.pathname));
+            Uri uri = Uri.fromFile(new File(mActionConfig.pathname));
+            intent.setDataAndType(uri, mActionConfig.mimeType);
         }
-        intent.setDataAndType(uri, mActionConfig.mimeType);
         return intent;
     }
 
