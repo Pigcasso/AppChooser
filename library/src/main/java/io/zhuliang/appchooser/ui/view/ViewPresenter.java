@@ -249,7 +249,6 @@ class ViewPresenter extends ResolveInfosPresenter<ViewContract.View> implements 
     }
 
     private void loadMediaTypesOrResolveInfos() {
-        Log.d("test", "loadMediaTypesOrResolveInfos: "+mActionConfig.mRecommendApp);
         if (MimeType.ALL.equals(mActionConfig.mimeType) && mActionConfig.mRecommendApp == null) {
             loadMediaTypes();
         } else {
