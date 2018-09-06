@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 
 import java.io.File;
 import java.util.List;
@@ -152,6 +153,8 @@ class ViewPresenter extends ResolveInfosPresenter<ViewContract.View> implements 
         Intent intent = new Intent(mActionConfig.actionName);
         intent.setDataAndType(Uri.fromFile(new File(mActionConfig.pathname)),
                 mActionConfig.mimeType);
+
+
         mSubscriptions.clear();
         Subscription subscription = mResolveInfosRepository
                 .listIntentActivities(intent)
@@ -180,6 +183,9 @@ class ViewPresenter extends ResolveInfosPresenter<ViewContract.View> implements 
                                 } else {
                                     mView.setLoadingIndicator(false);
                                     mView.showResolveInfos(resolveInfos);
+                                    if (mActionConfig.mRecommendApp != null) {
+                                        mView.showRecommendApp(mActionConfig.mRecommendApp);
+                                    }
                                 }
                             }
                         });
@@ -243,7 +249,8 @@ class ViewPresenter extends ResolveInfosPresenter<ViewContract.View> implements 
     }
 
     private void loadMediaTypesOrResolveInfos() {
-        if (MimeType.ALL.equals(mActionConfig.mimeType)) {
+        Log.d("test", "loadMediaTypesOrResolveInfos: "+mActionConfig.mRecommendApp);
+        if (MimeType.ALL.equals(mActionConfig.mimeType) && mActionConfig.mRecommendApp == null) {
             loadMediaTypes();
         } else {
             loadResolveInfos();

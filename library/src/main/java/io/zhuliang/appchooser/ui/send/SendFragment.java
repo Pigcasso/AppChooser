@@ -16,6 +16,7 @@ import io.zhuliang.appchooser.BuildConfig;
 import io.zhuliang.appchooser.Injection;
 import io.zhuliang.appchooser.R;
 import io.zhuliang.appchooser.action.ActionConfig;
+import io.zhuliang.appchooser.data.RecommendApp;
 import io.zhuliang.appchooser.data.ResolveInfosRepository;
 import io.zhuliang.appchooser.ui.resolveinfos.ResolveInfosFragment;
 
@@ -76,6 +77,11 @@ public class SendFragment extends ResolveInfosFragment<SendContract.Presenter>
     @Override
     protected ProgressBar getProgressBar() {
         return mProgressBar;
+    }
+
+    @Override
+    public void showRecommendApp(@NonNull RecommendApp app) {
+
     }
 
     @Override

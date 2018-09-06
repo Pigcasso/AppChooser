@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,9 +18,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,10 +40,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import io.zhuliang.appchooser.AppChooser;
+import io.zhuliang.appchooser.data.RecommendApp;
 import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.data.FileInfo;
-import io.zhuliang.appchooser.util.MimeType;
 
 public class FileInfosActivity extends AppCompatActivity {
     private static final String TAG = FileInfosActivity.class.getSimpleName();
@@ -223,9 +224,13 @@ public class FileInfosActivity extends AppCompatActivity {
         File file = new File(fileInfo.getAbsolutePath());
         AppChooser.from(this)
                 .file(new File(file.getAbsolutePath()))
+                .recommendApp(new RecommendApp(buildAppTitle("CADViewer"), "nutstore.android.cad",
+                        "坚果云出品，无广告，无水印",
+                        "https://www.baidu.com",
+                        R.drawable.ic_launcher))
                 .excluded(excluded)
                 .requestCode(REQUEST_CODE_OPEN_FILE)
-                .authority("io.zhuliang.appchooser.sample.fileprovider")
+//                .authority("io.zhuliang.appchooser.sample.fileprovider")
                 .load();
 
         /*File file = new File(fileInfo.getAbsolutePath());
@@ -246,6 +251,14 @@ public class FileInfosActivity extends AppCompatActivity {
             intent.setDataAndType(Uri.fromFile(file), mimeType);
         }
         startActivity(intent);*/
+    }
+
+    private CharSequence buildAppTitle(String title) {
+        SpannableString spannableString = new SpannableString(title + " $");
+        ImageSpan imageSpan = new ImageSpan(this, R.drawable.ic_recommend);
+        int start = spannableString.toString().indexOf("$");
+        spannableString.setSpan(imageSpan, start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannableString;
     }
 
     private void showDirectory(FileInfo fileInfo, @Operation int operation) {

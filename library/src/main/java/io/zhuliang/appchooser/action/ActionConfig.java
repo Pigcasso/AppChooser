@@ -7,12 +7,15 @@ import android.os.Parcelable;
 
 import java.io.File;
 
+import io.zhuliang.appchooser.data.RecommendApp;
+
 /**
  * @author Zhu Liang
  */
 
 public final class ActionConfig implements Parcelable {
 
+    public RecommendApp mRecommendApp;
     public String actionName;
     public String pathname;
     public int requestCode;
@@ -28,6 +31,9 @@ public final class ActionConfig implements Parcelable {
     public String authority;
     public boolean isUriExposed = true;
 
+    public ActionConfig() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -35,6 +41,7 @@ public final class ActionConfig implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.mRecommendApp, flags);
         dest.writeString(this.actionName);
         dest.writeString(this.pathname);
         dest.writeInt(this.requestCode);
@@ -46,10 +53,8 @@ public final class ActionConfig implements Parcelable {
         dest.writeByte(this.isUriExposed ? (byte) 1 : (byte) 0);
     }
 
-    public ActionConfig() {
-    }
-
     protected ActionConfig(Parcel in) {
+        this.mRecommendApp = in.readParcelable(RecommendApp.class.getClassLoader());
         this.actionName = in.readString();
         this.pathname = in.readString();
         this.requestCode = in.readInt();

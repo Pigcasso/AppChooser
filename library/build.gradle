@@ -43,5 +43,7 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportSdkVersion"
     implementation "io.reactivex:rxjava:$rootProject.ext.rxjava"
     implementation "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
-    implementation "com.zhy:base-rvadapter:$rootProject.ext.baservadapterVersion"
+//    implementation "com.zhy:base-rvadapter:$rootProject.ext.baservadapterVersion"
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
+
 }

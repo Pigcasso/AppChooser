@@ -10,6 +10,7 @@ import java.io.File;
 
 import io.zhuliang.appchooser.AppChooser;
 import io.zhuliang.appchooser.BuildConfig;
+import io.zhuliang.appchooser.data.RecommendApp;
 import io.zhuliang.appchooser.ui.view.ViewFragment;
 import io.zhuliang.appchooser.util.FileUtils;
 
@@ -32,6 +33,11 @@ public class ViewAction {
     public ViewAction file(@NonNull File file) {
         FileUtils.checkFile(file);
         mActionConfig.pathname = file.getAbsolutePath();
+        return this;
+    }
+
+    public ViewAction recommendApp(@NonNull RecommendApp app) {
+        mActionConfig.mRecommendApp = app;
         return this;
     }
 

@@ -17,8 +17,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.zhy.adapter.recyclerview.CommonAdapter;
-import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
@@ -27,8 +27,10 @@ import io.zhuliang.appchooser.Injection;
 import io.zhuliang.appchooser.R;
 import io.zhuliang.appchooser.action.ActionConfig;
 import io.zhuliang.appchooser.data.MediaType;
+import io.zhuliang.appchooser.data.RecommendApp;
 import io.zhuliang.appchooser.data.ResolveInfosRepository;
 import io.zhuliang.appchooser.ui.resolveinfos.ResolveInfosFragment;
+import io.zhuliang.appchooser.util.AppUtils;
 
 import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
@@ -45,6 +47,7 @@ public class ViewFragment extends ResolveInfosFragment<ViewContract.Presenter>
     private ProgressBar mProgressBar;
     private FrameLayout mCheckBoxContainer;
     private CheckBox mCheckBox;
+    private ActionConfig actionConfig;
 
     public static ViewFragment newInstance(ActionConfig actionConfig) {
         Bundle args = new Bundle();
@@ -57,7 +60,7 @@ public class ViewFragment extends ResolveInfosFragment<ViewContract.Presenter>
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionConfig actionConfig = null;
+        actionConfig = null;
         if (getArguments() != null) {
             actionConfig = getArguments().getParcelable(EXTRA_ACTION_CONFIG);
         }
@@ -106,6 +109,34 @@ public class ViewFragment extends ResolveInfosFragment<ViewContract.Presenter>
     }
 
     @Override
+    public void showRecommendApp(@NonNull final RecommendApp app) {
+        getRecyclerView().post(new Runnable() {
+            @Override
+            public void run() {
+                ResolveInfosAdapter adapter = (ResolveInfosAdapter) getRecyclerView().getAdapter();
+                adapter.addRecommendApp(actionConfig, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onClickRecommend(actionConfig);
+                        dismissDialog();
+                    }
+                });
+                getRecyclerView().scrollToPosition(0);
+            }
+        });
+    }
+
+    private void onClickRecommend(ActionConfig config) {
+        if (getContext() == null) return;
+
+        if (AppUtils.isPackageInstalled(getContext(), config.mRecommendApp.packageName)) {
+            AppUtils.openWithRecommendApp(getContext(), config);
+        } else {
+            AppUtils.browse(getContext(), config.mRecommendApp.downloadUrl);
+        }
+    }
+
+    @Override
     public void showNoResolveInfos() {
         Toast.makeText(getActivity(), getString(R.string.view_no_apps_can_open_this_file),
                 Toast.LENGTH_SHORT).show();
@@ -114,7 +145,7 @@ public class ViewFragment extends ResolveInfosFragment<ViewContract.Presenter>
     @Override
     public void showMediaTypes(List<MediaType> mediaTypes) {
         mCheckBoxContainer.setVisibility(View.GONE);
-        mRecyclerView.setAdapter(new MediaTypesAdapter(getContext(), mediaTypes,
+        mRecyclerView.setAdapter(new MediaTypesAdapter(mediaTypes,
                 new OnMediaTypesListener() {
                     @Override
                     public void onMediaType(MediaType mediaType) {
@@ -138,18 +169,18 @@ public class ViewFragment extends ResolveInfosFragment<ViewContract.Presenter>
         return mProgressBar;
     }
 
-    private static class MediaTypesAdapter extends CommonAdapter<MediaType> {
+    private static class MediaTypesAdapter extends BaseQuickAdapter<MediaType, BaseViewHolder> {
 
         private OnMediaTypesListener mOnMediaTypesListener;
 
-        private MediaTypesAdapter(Context context, List<MediaType> datas,
+        private MediaTypesAdapter(List<MediaType> datas,
                                   OnMediaTypesListener onMediaTypesListener) {
-            super(context, R.layout.item_media_type, datas);
+            super(R.layout.item_media_type, datas);
             mOnMediaTypesListener = checkNotNull(onMediaTypesListener);
         }
 
         @Override
-        protected void convert(ViewHolder viewHolder, final MediaType item, int position) {
+        protected void convert(BaseViewHolder viewHolder, final MediaType item) {
             viewHolder.setText(R.id.text_view_media_type_name, item.getDisplayName());
             viewHolder.getConvertView().setOnClickListener(new View.OnClickListener() {
                 @Override

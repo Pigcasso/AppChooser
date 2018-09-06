@@ -48,6 +48,7 @@ public final class AppChooser {
         return new ViewAction(this).file(file);
     }
 
+
     @Nullable
     public FragmentActivity getActivity() {
         return mActivity.get();

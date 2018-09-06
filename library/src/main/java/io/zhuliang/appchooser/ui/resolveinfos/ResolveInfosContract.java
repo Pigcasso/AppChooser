@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import io.zhuliang.appchooser.data.RecommendApp;
 import io.zhuliang.appchooser.ui.base.BaseDialogView;
 import io.zhuliang.appchooser.ui.base.BasePresenter;
 
@@ -21,6 +22,8 @@ public interface ResolveInfosContract {
         void setLoadingIndicator(boolean active);
 
         void showResolveInfos(@NonNull List<ResolveInfo> resolveInfos);
+
+        void showRecommendApp(@NonNull RecommendApp app);
 
         void showNoResolveInfos();
 

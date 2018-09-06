@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
     android:minHeight="56dp"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/image_view_resolver_icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"/>
+        android:layout_marginStart="16dp"
+        tools:src="@drawable/sample_footer_loading"/>
 
     <TextView
         android:id="@+id/text_view_resolve_display_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:layout_toRightOf="@+id/image_view_resolver_icon"/>
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/image_view_resolver_icon"
+        tools:text="CADViewer 圖片查看器"/>
+
 </RelativeLayout>

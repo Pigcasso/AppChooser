@@ -7,15 +7,19 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.zhy.adapter.recyclerview.CommonAdapter;
-import com.zhy.adapter.recyclerview.base.ViewHolder;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
 import io.zhuliang.appchooser.R;
+import io.zhuliang.appchooser.action.ActionConfig;
 import io.zhuliang.appchooser.ui.base.BaseDialogFragment;
 
 public abstract class ResolveInfosFragment<P extends ResolveInfosContract.Presenter>
@@ -56,26 +60,42 @@ public abstract class ResolveInfosFragment<P extends ResolveInfosContract.Presen
         }
     }
 
-    private static class ResolveInfosAdapter extends CommonAdapter<ResolveInfo> {
+    protected static class ResolveInfosAdapter extends BaseQuickAdapter<ResolveInfo, BaseViewHolder> {
+        private static final String TAG = "ResolveInfosAdapter";
 
         private PackageManager mPackageManager;
         private OnResolveInfoListener mOnResolveInfoListener;
 
         private ResolveInfosAdapter(Context context, List<ResolveInfo> datas,
                                     OnResolveInfoListener onResolveInfoListener) {
-            super(context, R.layout.item_resolve_info, datas);
+            super(R.layout.item_resolve_info, datas);
             mPackageManager = context.getPackageManager();
             mOnResolveInfoListener = onResolveInfoListener;
         }
 
+        public void addRecommendApp(final ActionConfig actionConfig, View.OnClickListener onClickListener) {
+            if (actionConfig.mRecommendApp == null) return;
+            View headerView = View.inflate(mContext, R.layout.item_recommend_app, null);
+            ImageView icon = headerView.findViewById(R.id.image_view_resolver_icon);
+            icon.setImageResource(actionConfig.mRecommendApp.iconResourceId);
+            TextView name = headerView.findViewById(R.id.text_view_resolve_display_name);
+            name.setText(actionConfig.mRecommendApp.name);
+            TextView desc = headerView.findViewById(R.id.tv_recommend_app_desc);
+            desc.setVisibility(TextUtils.isEmpty(actionConfig.mRecommendApp.description) ? View.GONE : View.VISIBLE);
+            desc.setText(actionConfig.mRecommendApp.description);
+            headerView.setOnClickListener(onClickListener);
+            addHeaderView(headerView);
+        }
+
         @Override
-        protected void convert(ViewHolder holder, final ResolveInfo resolveInfo, int position) {
+        protected void convert(BaseViewHolder holder, final ResolveInfo resolveInfo) {
+
             holder.setImageDrawable(R.id.image_view_resolver_icon,
                     resolveInfo.loadIcon(mPackageManager));
             holder.setText(R.id.text_view_resolve_display_name,
                     resolveInfo.loadLabel(mPackageManager).toString());
 
-            holder.getConvertView().setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mOnResolveInfoListener != null) {
@@ -84,6 +104,7 @@ public abstract class ResolveInfosFragment<P extends ResolveInfosContract.Presen
                 }
             });
         }
+
     }
 
     private interface OnResolveInfoListener {
