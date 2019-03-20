@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,7 +18,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,7 +32,6 @@ import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -42,7 +39,6 @@ import io.zhuliang.appchooser.AppChooser;
 import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.data.FileInfo;
-import io.zhuliang.appchooser.util.MimeType;
 
 public class FileInfosActivity extends AppCompatActivity {
     private static final String TAG = FileInfosActivity.class.getSimpleName();
@@ -471,13 +467,14 @@ public class FileInfosActivity extends AppCompatActivity {
         if (tab == null) {
             return;
         }
-        try {
+        tab.select();
+        /*try {
             Method method = TabLayout.class.getDeclaredMethod("selectTab", TabLayout.Tab.class);
             method.setAccessible(true);
             method.invoke(mTabLayout, tab);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private static class MyHandler extends Handler {
