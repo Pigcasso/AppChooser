@@ -2,11 +2,11 @@ package io.zhuliang.appchooser.data.local;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import io.zhuliang.appchooser.BuildConfig;
 import io.zhuliang.appchooser.data.ActivityInfo;
 import io.zhuliang.appchooser.data.ActivityInfosDataSource;
@@ -44,15 +44,22 @@ public class ActivityInfosSharedPreferencesDataSource implements ActivityInfosDa
 
     @NonNull
     @Override
-    public Observable<ActivityInfo> getActivityInfo(@Nullable String mimeType) {
+    public Observable<ActivityInfo> getActivityInfoRx(@Nullable String mimeType) {
+        return Observable.just(getActivityInfo(mimeType));
+    }
+
+    @Nullable
+    @Override
+    public ActivityInfo getActivityInfo(@Nullable String mimeType) {
         String value = mPreferences.getString(mimeType, null);
         if (value == null) {
-            return Observable.just(null);
+            return null;
+        } else {
+            String[] pkgAndCls = value.split("\\|");
+            String pkg = pkgAndCls[0];
+            String cls = pkgAndCls[1];
+            return new ActivityInfo(mimeType, pkg, cls);
         }
-        String[] pkgAndCls = value.split("\\|");
-        String pkg = pkgAndCls[0];
-        String cls = pkgAndCls[1];
-        return Observable.just(new ActivityInfo(mimeType, pkg, cls));
     }
 
     @Override

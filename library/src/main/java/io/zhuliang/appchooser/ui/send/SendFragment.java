@@ -60,8 +60,8 @@ public class SendFragment extends ResolveInfosFragment<SendContract.Presenter>
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Context context = getContext();
         View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_send, null);
-        mRecyclerView = (RecyclerView) contentView.findViewById(R.id.recycler_view);
-        mProgressBar = (ProgressBar) contentView.findViewById(R.id.progress_bar);
+        mRecyclerView = contentView.findViewById(R.id.recycler_view);
+        mProgressBar = contentView.findViewById(R.id.progress_bar);
         AlertDialog.Builder bottomSheetDialog = new AlertDialog.Builder(context);
         bottomSheetDialog.setView(contentView)
                 .setTitle(R.string.send_title);

@@ -1,10 +1,8 @@
 package io.zhuliang.appchooser.data;
 
-import androidx.annotation.NonNull;
-
-import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -26,18 +24,23 @@ public class MediaTypesRepository implements MediaTypesDataSource {
         mMediaTypesLocalDataSource = checkNotNull(mediaTypesLocalDataSource);
     }
 
+    @Deprecated
     @Override
-    public Observable<List<MediaType>> listMediaTypes() {
-        if (mCachedMediaTypes != null) {
-            return Observable.just(mCachedMediaTypes);
-        }
-        return mMediaTypesLocalDataSource
-                .listMediaTypes()
+    public Observable<List<MediaType>> listMediaTypesRx() {
+        return mMediaTypesLocalDataSource.listMediaTypesRx()
                 .doOnNext(new Action1<List<MediaType>>() {
                     @Override
                     public void call(List<MediaType> mediaTypes) {
-                        mCachedMediaTypes = new ArrayList<>(mediaTypes);
+                        mCachedMediaTypes = mediaTypes;
                     }
                 });
+    }
+
+    @Override
+    public List<MediaType> listMediaTypes() {
+        if (mCachedMediaTypes == null) {
+            mCachedMediaTypes = mMediaTypesLocalDataSource.listMediaTypes();
+        }
+        return mCachedMediaTypes;
     }
 }

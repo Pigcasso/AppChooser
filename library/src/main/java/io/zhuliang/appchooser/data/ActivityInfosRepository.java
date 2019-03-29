@@ -2,7 +2,6 @@ package io.zhuliang.appchooser.data;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import rx.Observable;
 
 import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
@@ -28,7 +27,13 @@ public class ActivityInfosRepository implements ActivityInfosDataSource {
 
     @NonNull
     @Override
-    public Observable<ActivityInfo> getActivityInfo(@Nullable String mimeType) {
+    public Observable<ActivityInfo> getActivityInfoRx(@Nullable String mimeType) {
+        return mActivityInfosLocalDataSource.getActivityInfoRx(mimeType);
+    }
+
+    @Nullable
+    @Override
+    public ActivityInfo getActivityInfo(@Nullable String mimeType) {
         return mActivityInfosLocalDataSource.getActivityInfo(mimeType);
     }
 

@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import androidx.annotation.NonNull;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import io.zhuliang.appchooser.util.schedulers.BaseSchedulerProvider;
 import rx.Observable;
 import rx.Subscriber;
@@ -33,13 +33,17 @@ public class ResolveInfosRepository implements ResolveInfosDataSource {
                 .create(new Observable.OnSubscribe<List<ResolveInfo>>() {
                     @Override
                     public void call(Subscriber<? super List<ResolveInfo>> subscriber) {
-                        List<ResolveInfo> resolveInfos = mPackageManager.queryIntentActivities(intent,
-                                PackageManager.MATCH_DEFAULT_ONLY);
-                        subscriber.onNext(resolveInfos);
+                        subscriber.onNext(listResolveInfos(intent));
                         subscriber.onCompleted();
                     }
                 })
                 .subscribeOn(mSchedulerProvider.io())
                 .observeOn(mSchedulerProvider.ui());
+    }
+
+    @Override
+    @NonNull
+    public List<ResolveInfo> listResolveInfos(@NonNull Intent intent) {
+        return mPackageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
     }
 }

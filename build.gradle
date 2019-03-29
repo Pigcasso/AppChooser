@@ -51,4 +51,6 @@ ext {
     baservadapterVersion = '3.0.3'
 
     androixVersion = '1.1.0-alpha03'
+
+    recyclerVersion = '1.0.0'
 }

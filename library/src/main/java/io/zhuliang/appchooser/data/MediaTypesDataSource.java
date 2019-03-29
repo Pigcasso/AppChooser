@@ -13,6 +13,8 @@ import rx.Observable;
  */
 
 public interface MediaTypesDataSource {
+    @Deprecated
+    Observable<List<MediaType>> listMediaTypesRx();
 
-    Observable<List<MediaType>> listMediaTypes();
+    List<MediaType> listMediaTypes();
 }

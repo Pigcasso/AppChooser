@@ -2,10 +2,10 @@ package io.zhuliang.appchooser.data;
 
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import androidx.annotation.NonNull;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import rx.Observable;
 
 /**
@@ -14,5 +14,9 @@ import rx.Observable;
 
 public interface ResolveInfosDataSource {
 
+    @Deprecated
     Observable<List<ResolveInfo>> listIntentActivities(@NonNull Intent intent);
+
+    @NonNull
+    List<ResolveInfo> listResolveInfos(@NonNull Intent intent);
 }

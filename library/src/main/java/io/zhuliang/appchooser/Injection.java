@@ -1,10 +1,11 @@
 package io.zhuliang.appchooser;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 import io.zhuliang.appchooser.data.ActivityInfosRepository;
 import io.zhuliang.appchooser.data.MediaTypesRepository;
+import io.zhuliang.appchooser.data.ResolveInfosRepository;
 import io.zhuliang.appchooser.data.ResolversRepository;
 import io.zhuliang.appchooser.data.local.ActivityInfosSharedPreferencesDataSource;
 import io.zhuliang.appchooser.data.local.MediaTypesLocalDataSource;
@@ -27,8 +28,8 @@ public class Injection {
         return new ActivityInfosRepository(new ActivityInfosSharedPreferencesDataSource(context));
     }
 
-    public static ResolversRepository providerResolversRepository(@NonNull Context context) {
-        return new ResolversRepository(context);
+    public static ResolveInfosRepository provideResolveInfosRepository(@NonNull Context context) {
+        return new ResolveInfosRepository(context, Injection.provideSchedulerProvider());
     }
 
     public static BaseSchedulerProvider provideSchedulerProvider() {

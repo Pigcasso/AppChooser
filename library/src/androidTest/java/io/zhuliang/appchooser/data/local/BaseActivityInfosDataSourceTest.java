@@ -39,7 +39,7 @@ public abstract class BaseActivityInfosDataSourceTest {
     public void saveActivityInfo() throws Exception {
         mDataSource.saveActivityInfo(TEST_CASE_1);
         mDataSource
-                .getActivityInfo(TEST_CASE_1.getMimeType())
+                .getActivityInfoRx(TEST_CASE_1.getMimeType())
                 .test()
                 .assertValues(TEST_CASE_1);
         int delete = mDataSource
@@ -55,7 +55,7 @@ public abstract class BaseActivityInfosDataSourceTest {
         mDataSource.saveActivityInfo(TEST_CASE_1);
 
         mDataSource
-                .getActivityInfo(TEST_CASE_1.getMimeType())
+                .getActivityInfoRx(TEST_CASE_1.getMimeType())
                 .test()
                 .assertValues(TEST_CASE_1);
         int delete = mDataSource
@@ -66,7 +66,7 @@ public abstract class BaseActivityInfosDataSourceTest {
     @Test
     public void getActivityInfo_UnknownMimeType() throws Exception {
         mDataSource.deleteAllActivityInfos();
-        mDataSource.getActivityInfo(UNKNOWN_MIME_TYPE)
+        mDataSource.getActivityInfoRx(UNKNOWN_MIME_TYPE)
                 .test()
                 .assertValue(null);
     }

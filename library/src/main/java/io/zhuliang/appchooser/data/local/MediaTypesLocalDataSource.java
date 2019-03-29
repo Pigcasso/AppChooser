@@ -2,11 +2,11 @@ package io.zhuliang.appchooser.data.local;
 
 import android.content.Context;
 import android.content.res.Resources;
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import io.zhuliang.appchooser.R;
 import io.zhuliang.appchooser.data.MediaType;
 import io.zhuliang.appchooser.data.MediaTypesDataSource;
@@ -30,7 +30,12 @@ public class MediaTypesLocalDataSource implements MediaTypesDataSource {
     }
 
     @Override
-    public Observable<List<MediaType>> listMediaTypes() {
+    public Observable<List<MediaType>> listMediaTypesRx() {
+        return Observable.just(listMediaTypes());
+    }
+
+    @Override
+    public List<MediaType> listMediaTypes() {
         String[] displayNames = mResources.getStringArray(
                 R.array.media_types_display_names);
         String[] mimeTypes = mResources.getStringArray(
@@ -41,6 +46,6 @@ public class MediaTypesLocalDataSource implements MediaTypesDataSource {
         for (int i = 0; i < size; i++) {
             mediaTypes.add(new MediaType(mimeTypes[i], displayNames[i]));
         }
-        return Observable.just(mediaTypes);
+        return mediaTypes;
     }
 }

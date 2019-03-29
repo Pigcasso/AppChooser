@@ -82,7 +82,7 @@ class ViewPresenter extends ResolveInfosPresenter<ViewContract.View> implements 
     public void loadActivityInfo() {
         mSubscriptions.clear();
         Subscription subscription = mActivityInfosRepository
-                .getActivityInfo(mActionConfig.mimeType)
+                .getActivityInfoRx(mActionConfig.mimeType)
                 .map(new Func1<ActivityInfo, ActivityInfo>() {
                     @Override
                     public ActivityInfo call(ActivityInfo activityInfo) {
@@ -118,7 +118,7 @@ class ViewPresenter extends ResolveInfosPresenter<ViewContract.View> implements 
 
         mSubscriptions.clear();
         Subscription subscription = mMediaTypesRepository
-                .listMediaTypes()
+                .listMediaTypesRx()
                 .subscribe(new Subscriber<List<MediaType>>() {
                     @Override
                     public void onCompleted() {

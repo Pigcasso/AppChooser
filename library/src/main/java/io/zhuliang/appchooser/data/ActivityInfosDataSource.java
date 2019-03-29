@@ -2,7 +2,6 @@ package io.zhuliang.appchooser.data;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import rx.Observable;
 
 /**
@@ -16,7 +15,11 @@ public interface ActivityInfosDataSource {
     void saveActivityInfo(@NonNull ActivityInfo activityInfo);
 
     @NonNull
-    Observable<ActivityInfo> getActivityInfo(@Nullable String mimeType);
+    @Deprecated
+    Observable<ActivityInfo> getActivityInfoRx(@Nullable String mimeType);
+
+    @Nullable
+    ActivityInfo getActivityInfo(@Nullable String mimeType);
 
     int deleteActivityInfo(@Nullable String mimeType);
 

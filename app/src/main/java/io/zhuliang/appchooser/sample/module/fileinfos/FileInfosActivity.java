@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -34,8 +33,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import io.zhuliang.appchooser.AppChooser;
 import io.zhuliang.appchooser.internal.Preconditions;
+import io.zhuliang.appchooser.sample.BuildConfig;
 import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.data.FileInfo;
+import io.zhuliang.appchooser.util.Logger;
 
 public class FileInfosActivity extends AppCompatActivity implements FileInfosFragment.OnItemClickListener {
     private static final String TAG = FileInfosActivity.class.getSimpleName();
@@ -157,7 +158,7 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
         if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
             int grantResult = grantResults[0];
             boolean granted = grantResult == PackageManager.PERMISSION_GRANTED;
-            Log.i(TAG, "onRequestPermissionsResult granted=" + granted);
+            Logger.d(TAG, "onRequestPermissionsResult granted=" + granted);
             if (granted) {
                 showDirectory(null, OPERATION_NONE);
             }
@@ -168,7 +169,7 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_OPEN_FILE) {
-            Log.d(TAG, "onActivityResult: " + requestCode + "," + resultCode + "," + data);
+            Logger.d(TAG, "onActivityResult: " + requestCode + "," + resultCode + "," + data);
         }
     }
 
@@ -208,7 +209,7 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
                 .file(new File(file.getAbsolutePath()))
                 .excluded(excluded)
                 .requestCode(REQUEST_CODE_OPEN_FILE)
-                .authority("io.zhuliang.appchooser.sample.fileprovider")
+                .authority(BuildConfig.APPLICATION_ID + ".fileprovider")
                 .load();
 
         /*File file = new File(fileInfo.getAbsolutePath());
@@ -232,7 +233,7 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
     }
 
     private void showDirectory(FileInfo fileInfo, @Operation int operation) {
-        Log.d(TAG, "showDirectory: " + operation);
+        Logger.d(TAG, "showDirectory: " + operation);
         switch (operation) {
             case OPERATION_NONE:
                 showDirectoryWithNone();
@@ -252,7 +253,7 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
     }
 
     private void showDirectoryWithNone() {
-        Log.d(TAG, "showDirectoryWithNone11111: " + (mSelectedDirectory == null ? "null" : mSelectedDirectory.getName()) + ", size: " + mDirectories.size());
+        Logger.d(TAG, "showDirectoryWithNone11111: " + (mSelectedDirectory == null ? "null" : mSelectedDirectory.getName()) + ", size: " + mDirectories.size());
         if (mSelectedDirectory == null) {
             mSelectedDirectory = new FileInfo(Environment.getExternalStorageDirectory());
             mDirectories.add(mSelectedDirectory);
@@ -291,7 +292,7 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
 
         Message msg = mMyHandler.obtainMessage();
         msg.arg1 = mDirectories.indexOf(mSelectedDirectory);
-        Log.d(TAG, "showDirectoryWithNone22222: " + (mSelectedDirectory == null ? "null" : mSelectedDirectory.getName()) + ", size: " + mDirectories.size());
+        Logger.d(TAG, "showDirectoryWithNone22222: " + (mSelectedDirectory == null ? "null" : mSelectedDirectory.getName()) + ", size: " + mDirectories.size());
         mMyHandler.sendMessageDelayed(msg, 100L);
     }
 
@@ -328,7 +329,7 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
     private void showDirectoryWithSelectedTab(FileInfo fileInfo) {
         Preconditions.checkNotNull(fileInfo, "fileInfo == null");
         Preconditions.checkNotNull(mSelectedDirectory, "mSelectedDirectory == null");
-        Log.d(TAG, "showDirectoryWithSelectedTab: " + fileInfo.getName());
+        Logger.d(TAG, "showDirectoryWithSelectedTab: " + fileInfo.getName());
         if (mSelectedDirectory != fileInfo) {
             FragmentTransaction ft = mFragmentManager.beginTransaction();
             Fragment f = mFragmentManager.findFragmentByTag(mSelectedDirectory.getAbsolutePath());

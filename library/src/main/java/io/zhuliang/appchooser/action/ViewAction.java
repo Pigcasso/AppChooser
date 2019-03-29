@@ -2,15 +2,17 @@ package io.zhuliang.appchooser.action;
 
 import android.content.ComponentName;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import java.io.File;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import io.zhuliang.appchooser.AppChooser;
 import io.zhuliang.appchooser.BuildConfig;
-import io.zhuliang.appchooser.ui.view.ViewFragment;
+import io.zhuliang.appchooser.internal.Preconditions;
+import io.zhuliang.appchooser.ui2.view.ViewFragment;
 import io.zhuliang.appchooser.util.FileUtils;
 
 /**
@@ -53,18 +55,21 @@ public class ViewAction {
 
     public void load() {
         FragmentActivity activity = mAppChooser.getActivity();
-        if (activity == null) {
+        if (activity != null) {
+            mActionConfig.fromActivity = true;
+            ViewFragment.newInstance(mActionConfig).show(activity.getSupportFragmentManager(),
+                    FRAGMENT_TAG);
             return;
         }
         Fragment fragment = mAppChooser.getFragment();
         if (fragment != null) {
             mActionConfig.fromActivity = false;
-            ViewFragment.newInstance(mActionConfig).show(fragment.getFragmentManager(),
+            FragmentManager fragmentManager =
+                    Preconditions.checkNotNull(fragment.getFragmentManager());
+            ViewFragment.newInstance(mActionConfig).show(fragmentManager,
                     FRAGMENT_TAG);
-        } else {
-            mActionConfig.fromActivity = true;
-            ViewFragment.newInstance(mActionConfig).show(activity.getSupportFragmentManager(),
-                    FRAGMENT_TAG);
+            return;
         }
+        throw new NullPointerException("activity and fragment both are null");
     }
 }
