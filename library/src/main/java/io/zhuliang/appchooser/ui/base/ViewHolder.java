@@ -1,6 +1,7 @@
 package io.zhuliang.appchooser.ui.base;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,12 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public ViewHolder setImageResource(int viewId, @DrawableRes int resId) {
         ImageView view = getView(viewId);
         view.setImageResource(resId);
+        return this;
+    }
+
+    public ViewHolder setImageDrawable(int viewId, Drawable drawable) {
+        ImageView view = getView(viewId);
+        view.setImageDrawable(drawable);
         return this;
     }
 

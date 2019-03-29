@@ -61,7 +61,8 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(v, holder, holder.getAdapterPosition());
+                    int position = holder.getAdapterPosition();
+                    mOnItemClickListener.onItemClick(v, getDatas().get(position), position);
                 }
             }
         });
@@ -72,6 +73,6 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, ViewHolder holder, int position);
+        void onItemClick(View view, Object item, int position);
     }
 }

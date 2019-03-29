@@ -1,9 +1,6 @@
 package io.zhuliang.appchooser.sample.module.fileinfos;
 
 import android.content.Context;
-import android.view.View;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 

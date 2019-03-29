@@ -10,23 +10,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
-import com.google.android.material.tabs.TabLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.lang.annotation.Retention;
@@ -35,12 +23,21 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import io.zhuliang.appchooser.AppChooser;
 import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.data.FileInfo;
 
-public class FileInfosActivity extends AppCompatActivity {
+public class FileInfosActivity extends AppCompatActivity implements FileInfosFragment.OnItemClickListener {
     private static final String TAG = FileInfosActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 110;
     private static final String EXTRA_SELECTED_DIRECTORy = "extra_selected_directory";
@@ -75,6 +72,24 @@ public class FileInfosActivity extends AppCompatActivity {
 
     private MyHandler mMyHandler;
 
+    private TabLayout.OnTabSelectedListener mOnTabSelectedListener =
+            new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    showDirectory((FileInfo) tab.getTag(), OPERATION_SELECTED_TAB);
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            };
+
     public static void start(Context context) {
         Intent starter = new Intent(context, FileInfosActivity.class);
         context.startActivity(starter);
@@ -95,7 +110,7 @@ public class FileInfosActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_file_infos);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         /*ActionBar actionBar = getSupportActionBar();
@@ -103,23 +118,8 @@ public class FileInfosActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(false);
         }*/
 
-        mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                showDirectory((FileInfo) tab.getTag(), OPERATION_SELECTED_TAB);
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        mTabLayout = findViewById(R.id.tabLayout);
+        mTabLayout.addOnTabSelectedListener(mOnTabSelectedListener);
 
 //        mAppChooser = AppChooser.with(this).excluded(excluded);
 
@@ -139,29 +139,16 @@ public class FileInfosActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onDestroy() {
+        super.onDestroy();
+        mTabLayout.removeOnTabSelectedListener(mOnTabSelectedListener);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(EXTRA_DIRECTORIES, mDirectories);
         outState.putParcelable(EXTRA_SELECTED_DIRECTORy, mSelectedDirectory);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-//        mAppChooser.bind();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-//        mAppChooser.unbind();
     }
 
     @Override
@@ -206,8 +193,8 @@ public class FileInfosActivity extends AppCompatActivity {
         showDirectory(null, OPERATION_BACK_PRESSED);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFileInfo(FileInfo fileInfo) {
+    @Override
+    public void onItemClick(FileInfo fileInfo) {
         if (fileInfo.isFile()) {
             showFile(fileInfo);
         } else {
@@ -440,7 +427,8 @@ public class FileInfosActivity extends AppCompatActivity {
     private int getPositionForTab(FileInfo directory) {
         int tabCount = mTabLayout.getTabCount();
         for (int i = 0; i < tabCount; i++) {
-            FileInfo tag = getTabTag(mTabLayout.getTabAt(i));
+            TabLayout.Tab tab = Preconditions.checkNotNull(mTabLayout.getTabAt(i));
+            FileInfo tag = getTabTag(tab);
             if (tag.equals(directory)) {
                 return i;
             }
@@ -449,7 +437,7 @@ public class FileInfosActivity extends AppCompatActivity {
     }
 
     @NonNull
-    private FileInfo getTabTag(TabLayout.Tab tab) {
+    private FileInfo getTabTag(@NonNull TabLayout.Tab tab) {
         FileInfo tabTag = (FileInfo) tab.getTag();
         if (tabTag == null) {
             throw new NullPointerException("tabTag == null");

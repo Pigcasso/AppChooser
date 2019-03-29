@@ -22,7 +22,6 @@ import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.SampleInjection;
 import io.zhuliang.appchooser.sample.data.FileInfo;
 import io.zhuliang.appchooser.ui.base.CommonAdapter;
-import io.zhuliang.appchooser.ui.base.ViewHolder;
 
 public class FileInfosFragment extends Fragment implements FileInfosContract.View {
 
@@ -66,15 +65,16 @@ public class FileInfosFragment extends Fragment implements FileInfosContract.Vie
         mAdapter = new FileInfosAdapter(getContext(), new ArrayList<FileInfo>());
         mAdapter.setOnItemClickListener(new CommonAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, ViewHolder holder, int position) {
-                mOnItemClickListener.onItemClick(mAdapter.getDatas().get(position));
+            public void onItemClick(View view, Object item, int position) {
+                mOnItemClickListener.onItemClick((FileInfo) item);
             }
         });
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_file_infos, container, false);
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view_file_infos);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
