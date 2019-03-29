@@ -1,7 +1,7 @@
 package io.zhuliang.appchooser;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.zhuliang.appchooser.data.ActivityInfosRepository;
 import io.zhuliang.appchooser.data.MediaTypesRepository;

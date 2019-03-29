@@ -1,6 +1,6 @@
 package io.zhuliang.appchooser.sample.data;
 
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +10,6 @@ import java.io.File;
 
 import io.zhuliang.appchooser.sample.constant.FileConsts;
 import io.julian.mvp.util.schedulers.ImmediateSchedulerProvider;
-import io.zhuliang.appchooser.sample.data.FileInfo;
-import io.zhuliang.appchooser.sample.data.FileInfosRepository;
 
 /**
  * @author Zhu Liang

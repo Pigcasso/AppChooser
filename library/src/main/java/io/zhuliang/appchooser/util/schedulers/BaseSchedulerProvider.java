@@ -1,6 +1,6 @@
 package io.zhuliang.appchooser.util.schedulers;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import rx.Scheduler;
 

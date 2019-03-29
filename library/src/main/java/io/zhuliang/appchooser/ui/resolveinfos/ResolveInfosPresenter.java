@@ -2,8 +2,8 @@ package io.zhuliang.appchooser.ui.resolveinfos;
 
 import android.content.ComponentName;
 import android.content.pm.ResolveInfo;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import io.zhuliang.appchooser.action.ActionConfig;
 import io.zhuliang.appchooser.data.ActivityInfo;

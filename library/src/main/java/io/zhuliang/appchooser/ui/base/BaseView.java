@@ -1,6 +1,6 @@
 package io.zhuliang.appchooser.ui.base;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public interface BaseView<P extends BasePresenter> {
 

@@ -1,6 +1,6 @@
 package io.zhuliang.appchooser.internal;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * @author Zhu Liang

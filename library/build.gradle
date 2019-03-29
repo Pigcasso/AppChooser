@@ -10,7 +10,7 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
     buildTypes {
@@ -35,12 +35,11 @@ dependencies {
 
     androidTestImplementation "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
 
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0-alpha02', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportSdkVersion"
-    implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportSdkVersion"
+    implementation "androidx.appcompat:appcompat:$rootProject.ext.androixVersion"
     implementation "io.reactivex:rxjava:$rootProject.ext.rxjava"
     implementation "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
     implementation "com.zhy:base-rvadapter:$rootProject.ext.baservadapterVersion"

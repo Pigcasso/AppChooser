@@ -49,4 +49,6 @@ ext {
     eventbusVersion  = '3.0.0'
 
     baservadapterVersion = '3.0.3'
+
+    androixVersion = '1.1.0-alpha03'
 }

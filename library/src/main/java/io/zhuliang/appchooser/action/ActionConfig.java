@@ -22,7 +22,7 @@ public final class ActionConfig implements Parcelable {
     // Activity.startActivity 还是 Fragment.startActivity
     public boolean fromActivity;
     /**
-     * 用于 {@link android.support.v4.content.FileProvider#getUriForFile(Context, String, File)}
+     * 用于 {@link androidx.core.content.FileProvider#getUriForFile(Context, String, File)}
      * 的第二个参数
      */
     public String authority;

@@ -28,7 +28,7 @@
             android:label="@string/share_title" />
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="io.zhuliang.appchooser.sample.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

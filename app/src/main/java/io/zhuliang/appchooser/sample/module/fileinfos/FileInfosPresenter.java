@@ -1,6 +1,6 @@
 package io.zhuliang.appchooser.sample.module.fileinfos;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 

@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -17,8 +17,6 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.util.List;
 
-import io.zhuliang.appchooser.data.Resolver;
-import io.zhuliang.appchooser.data.ResolversRepository;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
