@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import io.zhuliang.appchooser.BuildConfig;
 import io.zhuliang.appchooser.data.ActivityInfo;
 import io.zhuliang.appchooser.data.ActivityInfosDataSource;
-import rx.Observable;
 
 import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
@@ -40,12 +39,6 @@ public class ActivityInfosSharedPreferencesDataSource implements ActivityInfosDa
 
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(mimeType, String.format("%s|%s", pkg, cls)).apply();
-    }
-
-    @NonNull
-    @Override
-    public Observable<ActivityInfo> getActivityInfoRx(@Nullable String mimeType) {
-        return Observable.just(getActivityInfo(mimeType));
     }
 
     @Nullable

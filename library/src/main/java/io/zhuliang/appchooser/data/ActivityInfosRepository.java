@@ -25,12 +25,6 @@ public class ActivityInfosRepository implements ActivityInfosDataSource {
         mActivityInfosLocalDataSource.saveActivityInfo(activityInfo);
     }
 
-    @NonNull
-    @Override
-    public Observable<ActivityInfo> getActivityInfoRx(@Nullable String mimeType) {
-        return mActivityInfosLocalDataSource.getActivityInfoRx(mimeType);
-    }
-
     @Nullable
     @Override
     public ActivityInfo getActivityInfo(@Nullable String mimeType) {

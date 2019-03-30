@@ -40,7 +40,5 @@ dependencies {
     })
 
     implementation "androidx.appcompat:appcompat:$rootProject.ext.androixVersion"
-    implementation "io.reactivex:rxjava:$rootProject.ext.rxjava"
-    implementation "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
     implementation "androidx.recyclerview:recyclerview:$rootProject.ext.recyclerVersion"
 }

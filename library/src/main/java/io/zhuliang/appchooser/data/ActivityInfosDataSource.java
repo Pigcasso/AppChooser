@@ -14,10 +14,6 @@ public interface ActivityInfosDataSource {
 
     void saveActivityInfo(@NonNull ActivityInfo activityInfo);
 
-    @NonNull
-    @Deprecated
-    Observable<ActivityInfo> getActivityInfoRx(@Nullable String mimeType);
-
     @Nullable
     ActivityInfo getActivityInfo(@Nullable String mimeType);
 

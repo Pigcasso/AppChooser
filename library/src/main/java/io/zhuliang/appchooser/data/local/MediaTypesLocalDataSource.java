@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import io.zhuliang.appchooser.R;
 import io.zhuliang.appchooser.data.MediaType;
 import io.zhuliang.appchooser.data.MediaTypesDataSource;
-import rx.Observable;
 
 import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
@@ -27,11 +26,6 @@ public class MediaTypesLocalDataSource implements MediaTypesDataSource {
     public MediaTypesLocalDataSource(@NonNull Context context) {
         checkNotNull(context);
         mResources = context.getResources();
-    }
-
-    @Override
-    public Observable<List<MediaType>> listMediaTypesRx() {
-        return Observable.just(listMediaTypes());
     }
 
     @Override

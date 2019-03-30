@@ -19,8 +19,8 @@ import io.zhuliang.appchooser.R;
 import io.zhuliang.appchooser.action.ActionConfig;
 import io.zhuliang.appchooser.data.ActivityInfo;
 import io.zhuliang.appchooser.internal.Preconditions;
-import io.zhuliang.appchooser.ui.base.CommonAdapter;
-import io.zhuliang.appchooser.ui.base.ViewHolder;
+import io.zhuliang.appchooser.ui2.base.CommonAdapter;
+import io.zhuliang.appchooser.ui2.base.ViewHolder;
 
 public abstract class ResolveInfosFragment extends DialogFragment {
     protected ActionConfig mActionConfig;

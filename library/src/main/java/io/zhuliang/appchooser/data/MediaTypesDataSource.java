@@ -2,8 +2,6 @@ package io.zhuliang.appchooser.data;
 
 import java.util.List;
 
-import rx.Observable;
-
 /**
  * {@link MediaType} 数据源
  *
@@ -13,8 +11,5 @@ import rx.Observable;
  */
 
 public interface MediaTypesDataSource {
-    @Deprecated
-    Observable<List<MediaType>> listMediaTypesRx();
-
     List<MediaType> listMediaTypes();
 }

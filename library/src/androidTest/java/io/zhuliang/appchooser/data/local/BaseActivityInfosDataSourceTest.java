@@ -1,13 +1,12 @@
 package io.zhuliang.appchooser.data.local;
 
-import androidx.annotation.NonNull;
-import androidx.test.runner.AndroidJUnit4;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import androidx.annotation.NonNull;
+import androidx.test.runner.AndroidJUnit4;
 import io.zhuliang.appchooser.data.ActivityInfo;
 import io.zhuliang.appchooser.data.ActivityInfosDataSource;
 
@@ -28,7 +27,7 @@ public abstract class BaseActivityInfosDataSourceTest {
     private ActivityInfosDataSource mDataSource;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mDataSource = getDataSource();
     }
 
@@ -36,62 +35,56 @@ public abstract class BaseActivityInfosDataSourceTest {
     abstract ActivityInfosDataSource getDataSource();
 
     @Test
-    public void saveActivityInfo() throws Exception {
+    public void saveActivityInfo() {
         mDataSource.saveActivityInfo(TEST_CASE_1);
-        mDataSource
-                .getActivityInfoRx(TEST_CASE_1.getMimeType())
-                .test()
-                .assertValues(TEST_CASE_1);
-        int delete = mDataSource
-                .deleteActivityInfo(TEST_CASE_1.getMimeType());
-        Assert.assertTrue(delete == 1);
+        ActivityInfo activityInfo = mDataSource.getActivityInfo(TEST_CASE_1.getMimeType());
+        Assert.assertEquals(TEST_CASE_1, activityInfo);
+        int delete = mDataSource.deleteActivityInfo(TEST_CASE_1.getMimeType());
+        Assert.assertEquals(1, delete);
     }
 
     @Test
-    public void getActivityInfo_whenSavedFourTestCase1s() throws Exception {
+    public void getActivityInfo_whenSavedFourTestCase1s() {
         mDataSource.saveActivityInfo(TEST_CASE_1);
         mDataSource.saveActivityInfo(TEST_CASE_1);
         mDataSource.saveActivityInfo(TEST_CASE_1);
         mDataSource.saveActivityInfo(TEST_CASE_1);
 
-        mDataSource
-                .getActivityInfoRx(TEST_CASE_1.getMimeType())
-                .test()
-                .assertValues(TEST_CASE_1);
+        ActivityInfo activityInfo = mDataSource.getActivityInfo(TEST_CASE_1.getMimeType());
+        Assert.assertEquals(TEST_CASE_1, activityInfo);
         int delete = mDataSource
                 .deleteActivityInfo(TEST_CASE_1.getMimeType());
-        Assert.assertTrue(delete == 1);
+        Assert.assertEquals(1, delete);
     }
 
     @Test
-    public void getActivityInfo_UnknownMimeType() throws Exception {
+    public void getActivityInfo_UnknownMimeType() {
         mDataSource.deleteAllActivityInfos();
-        mDataSource.getActivityInfoRx(UNKNOWN_MIME_TYPE)
-                .test()
-                .assertValue(null);
+        ActivityInfo activityInfo = mDataSource.getActivityInfo(UNKNOWN_MIME_TYPE);
+        Assert.assertNull(activityInfo);
     }
 
     @Test
-    public void deleteActivityInfo_whenMimeTypeIsNull() throws Exception {
+    public void deleteActivityInfo_whenMimeTypeIsNull() {
         int delete = mDataSource.deleteActivityInfo(null);
-        Assert.assertTrue(delete == 0);
+        Assert.assertEquals(0, delete);
     }
 
     @Test
-    public void deleteActivityInfo_whenMimeTypeExisted() throws Exception {
+    public void deleteActivityInfo_whenMimeTypeExisted() {
         mDataSource.saveActivityInfo(TEST_CASE_1);
         int delete = mDataSource.deleteActivityInfo(TEST_CASE_1.getMimeType());
         Assert.assertEquals(1, delete);
     }
 
     @Test
-    public void deleteActivityInfo_whenMimeTypeNotExisted() throws Exception {
+    public void deleteActivityInfo_whenMimeTypeNotExisted() {
         int delete = mDataSource.deleteActivityInfo(UNKNOWN_MIME_TYPE);
         Assert.assertEquals(0, delete);
     }
 
     @Test
-    public void deleteAllActivityInfos() throws Exception {
+    public void deleteAllActivityInfos() {
         mDataSource.saveActivityInfo(TEST_CASE_1);
         mDataSource.saveActivityInfo(TEST_CASE_2);
         mDataSource.saveActivityInfo(TEST_CASE_3);
@@ -102,7 +95,7 @@ public abstract class BaseActivityInfosDataSourceTest {
     }
 
     @Test
-    public void deleteAllActivityInfos_whenActivityInfosAreEmpty() throws Exception {
+    public void deleteAllActivityInfos_whenActivityInfosAreEmpty() {
         mDataSource.deleteAllActivityInfos();
         int delete = mDataSource.deleteAllActivityInfos();
         Assert.assertEquals(0, delete);

@@ -3,8 +3,6 @@ package io.zhuliang.appchooser.data;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import rx.Observable;
-import rx.functions.Action1;
 
 import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
@@ -22,18 +20,6 @@ public class MediaTypesRepository implements MediaTypesDataSource {
 
     public MediaTypesRepository(@NonNull MediaTypesDataSource mediaTypesLocalDataSource) {
         mMediaTypesLocalDataSource = checkNotNull(mediaTypesLocalDataSource);
-    }
-
-    @Deprecated
-    @Override
-    public Observable<List<MediaType>> listMediaTypesRx() {
-        return mMediaTypesLocalDataSource.listMediaTypesRx()
-                .doOnNext(new Action1<List<MediaType>>() {
-                    @Override
-                    public void call(List<MediaType> mediaTypes) {
-                        mCachedMediaTypes = mediaTypes;
-                    }
-                });
     }
 
     @Override
