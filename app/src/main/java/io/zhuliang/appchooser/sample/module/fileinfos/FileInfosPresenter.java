@@ -6,7 +6,7 @@ import java.util.List;
 
 import io.zhuliang.appchooser.sample.data.FileInfo;
 import io.zhuliang.appchooser.sample.data.FileInfosRepository;
-import io.zhuliang.appchooser.util.schedulers.BaseSchedulerProvider;
+import io.zhuliang.appchooser.sample.util.schedulers.BaseSchedulerProvider;
 import rx.functions.Action1;
 
 import static io.zhuliang.appchooser.internal.Preconditions.checkArgument;

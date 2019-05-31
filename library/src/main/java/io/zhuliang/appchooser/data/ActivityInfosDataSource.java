@@ -2,7 +2,6 @@ package io.zhuliang.appchooser.data;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import rx.Observable;
 
 /**
  * @author Zhu Liang

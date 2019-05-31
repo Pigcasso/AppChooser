@@ -3,14 +3,12 @@ package io.zhuliang.appchooser;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+
 import io.zhuliang.appchooser.data.ActivityInfosRepository;
 import io.zhuliang.appchooser.data.MediaTypesRepository;
 import io.zhuliang.appchooser.data.ResolveInfosRepository;
-import io.zhuliang.appchooser.data.ResolversRepository;
 import io.zhuliang.appchooser.data.local.ActivityInfosSharedPreferencesDataSource;
 import io.zhuliang.appchooser.data.local.MediaTypesLocalDataSource;
-import io.zhuliang.appchooser.util.schedulers.BaseSchedulerProvider;
-import io.zhuliang.appchooser.util.schedulers.SchedulerProvider;
 
 /**
  * @author Zhu Liang
@@ -29,10 +27,6 @@ public class Injection {
     }
 
     public static ResolveInfosRepository provideResolveInfosRepository(@NonNull Context context) {
-        return new ResolveInfosRepository(context, Injection.provideSchedulerProvider());
-    }
-
-    public static BaseSchedulerProvider provideSchedulerProvider() {
-        return SchedulerProvider.getInstance();
+        return new ResolveInfosRepository(context);
     }
 }

@@ -1,4 +1,4 @@
-package io.zhuliang.appchooser.util.schedulers;
+package io.zhuliang.appchooser.sample.util.schedulers;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

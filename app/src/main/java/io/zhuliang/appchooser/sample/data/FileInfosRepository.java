@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.zhuliang.appchooser.internal.Preconditions;
-import io.zhuliang.appchooser.util.schedulers.BaseSchedulerProvider;
+import io.zhuliang.appchooser.sample.util.schedulers.BaseSchedulerProvider;
 import rx.Observable;
 import rx.functions.Func1;
 

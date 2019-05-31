@@ -2,7 +2,6 @@ package io.zhuliang.appchooser.data;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import rx.Observable;
 
 import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
