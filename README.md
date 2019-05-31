@@ -20,7 +20,11 @@
 
 ## 依赖
 
-`compile 'io.julian:appchooser:2.0.1'`
+`implementation 'com.github.Pigcasso:AppChooser:Tag'`
+
+## 4.0.0 特性
+
+- 移除 RxJava
 
 ## 2.0.1 特性
 
