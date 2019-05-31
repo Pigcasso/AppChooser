@@ -1,5 +1,7 @@
 # AppChooser
 
+[![](https://jitpack.io/v/Pigcasso/AppChooser.svg)](https://jitpack.io/#Pigcasso/AppChooser)
+
 ## 描述
 自定义打开指定文件的应用选择器。
 ## 起因
