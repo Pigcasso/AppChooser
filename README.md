@@ -22,6 +22,10 @@
 
 `implementation 'com.github.Pigcasso:AppChooser:Tag'`
 
+## 4.0.1 特性
+
+- 修复 Android 10 不能打开APK文件的 bug
+
 ## 4.0.0 特性
 
 - 移除 RxJava
