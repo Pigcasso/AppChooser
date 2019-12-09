@@ -29,12 +29,12 @@ public class ShareActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
     public void onShareClick(View view) {
-        EditText editText = (EditText) findViewById(R.id.edit_text);
+        EditText editText = findViewById(R.id.edit_text);
         if (editText != null) {
             CharSequence shareContent = editText.getText();
             AppChooser.from(this).text(shareContent.toString()).excluded(mComponentNames).load();
