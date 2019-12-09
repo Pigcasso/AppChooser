@@ -17,14 +17,15 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+
 import io.zhuliang.appchooser.BuildConfig;
 import io.zhuliang.appchooser.Injection;
 import io.zhuliang.appchooser.R;
@@ -186,8 +187,16 @@ public class ViewFragment extends ResolveInfosFragment {
         Logger.d(TAG, "loadResolveInfos: START");
         setLoadingIndicator(true);
         Intent intent = new Intent(mActionConfig.actionName);
-        intent.setDataAndType(Uri.fromFile(new File(mActionConfig.pathname)),
-                mActionConfig.mimeType);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Context context = Preconditions.checkNotNull(getContext());
+            Uri uri = FileProvider.getUriForFile(context, mActionConfig.authority,
+                    new File(mActionConfig.pathname));
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(uri, mActionConfig.mimeType);
+        } else {
+            Uri uri = Uri.fromFile(new File(mActionConfig.pathname));
+            intent.setDataAndType(uri, mActionConfig.mimeType);
+        }
         List<ResolveInfo> resolveInfos = mResolveInfosRepository.listResolveInfos(intent);
         // 将包含在"排除组件列表"中的 resolveInfo 移除
         Iterator<ResolveInfo> iterator = resolveInfos.iterator();
