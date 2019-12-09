@@ -6,8 +6,8 @@ import java.util.List;
 
 import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.data.FileInfo;
-import io.zhuliang.appchooser.ui2.base.CommonAdapter;
-import io.zhuliang.appchooser.ui2.base.ViewHolder;
+import io.zhuliang.appchooser.ui.base.CommonAdapter;
+import io.zhuliang.appchooser.ui.base.ViewHolder;
 
 /**
  * @author Zhu Liang

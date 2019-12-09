@@ -1,4 +1,4 @@
-package io.zhuliang.appchooser.ui2.send;
+package io.zhuliang.appchooser.ui.send;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -25,7 +25,7 @@ import io.zhuliang.appchooser.R;
 import io.zhuliang.appchooser.action.ActionConfig;
 import io.zhuliang.appchooser.data.ResolveInfosRepository;
 import io.zhuliang.appchooser.internal.Preconditions;
-import io.zhuliang.appchooser.ui2.resolveinfos.ResolveInfosFragment;
+import io.zhuliang.appchooser.ui.resolveinfos.ResolveInfosFragment;
 import io.zhuliang.appchooser.util.Logger;
 import io.zhuliang.appchooser.util.ToastUtils;
 

@@ -1,4 +1,4 @@
-package io.zhuliang.appchooser.ui2.view;
+package io.zhuliang.appchooser.ui.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -36,9 +36,9 @@ import io.zhuliang.appchooser.data.MediaType;
 import io.zhuliang.appchooser.data.MediaTypesRepository;
 import io.zhuliang.appchooser.data.ResolveInfosRepository;
 import io.zhuliang.appchooser.internal.Preconditions;
-import io.zhuliang.appchooser.ui2.base.CommonAdapter;
-import io.zhuliang.appchooser.ui2.base.ViewHolder;
-import io.zhuliang.appchooser.ui2.resolveinfos.ResolveInfosFragment;
+import io.zhuliang.appchooser.ui.base.CommonAdapter;
+import io.zhuliang.appchooser.ui.base.ViewHolder;
+import io.zhuliang.appchooser.ui.resolveinfos.ResolveInfosFragment;
 import io.zhuliang.appchooser.util.FileUtils;
 import io.zhuliang.appchooser.util.Logger;
 import io.zhuliang.appchooser.util.MimeType;

@@ -1,4 +1,4 @@
-package io.zhuliang.appchooser.ui2.send;
+package io.zhuliang.appchooser.ui.send;
 
 import android.content.Context;
 import android.content.Intent;

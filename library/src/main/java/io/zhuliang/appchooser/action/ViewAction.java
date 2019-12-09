@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import io.zhuliang.appchooser.AppChooser;
 import io.zhuliang.appchooser.BuildConfig;
 import io.zhuliang.appchooser.internal.Preconditions;
-import io.zhuliang.appchooser.ui2.view.ViewFragment;
+import io.zhuliang.appchooser.ui.view.ViewFragment;
 import io.zhuliang.appchooser.util.FileUtils;
 
 /**

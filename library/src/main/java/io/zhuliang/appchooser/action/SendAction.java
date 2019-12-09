@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import io.zhuliang.appchooser.AppChooser;
 import io.zhuliang.appchooser.BuildConfig;
 import io.zhuliang.appchooser.internal.Preconditions;
-import io.zhuliang.appchooser.ui2.send.SendFragment;
+import io.zhuliang.appchooser.ui.send.SendFragment;
 import io.zhuliang.appchooser.util.MimeType;
 
 /**

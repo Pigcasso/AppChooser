@@ -21,7 +21,7 @@ import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.SampleInjection;
 import io.zhuliang.appchooser.sample.data.FileInfo;
-import io.zhuliang.appchooser.ui2.base.CommonAdapter;
+import io.zhuliang.appchooser.ui.base.CommonAdapter;
 
 public class FileInfosFragment extends Fragment implements FileInfosContract.View {
 

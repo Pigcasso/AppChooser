@@ -1,4 +1,4 @@
-package io.zhuliang.appchooser.ui2.base;
+package io.zhuliang.appchooser.ui.base;
 
 import android.content.Context;
 import android.view.View;
