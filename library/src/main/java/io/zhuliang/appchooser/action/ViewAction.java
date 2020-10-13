@@ -3,15 +3,14 @@ package io.zhuliang.appchooser.action;
 import android.content.ComponentName;
 import android.content.Intent;
 
-import java.io.File;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
+
+import java.io.File;
+
 import io.zhuliang.appchooser.AppChooser;
 import io.zhuliang.appchooser.BuildConfig;
-import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.ui.view.ViewFragment;
 import io.zhuliang.appchooser.util.FileUtils;
 
@@ -21,7 +20,7 @@ import io.zhuliang.appchooser.util.FileUtils;
 
 public class ViewAction {
 
-    private static final String FRAGMENT_TAG = BuildConfig.APPLICATION_ID + ".fragment.tag.VIEW";
+    private static final String FRAGMENT_TAG = BuildConfig.LIBRARY_PACKAGE_NAME + ".fragment.tag.VIEW";
 
     private AppChooser mAppChooser;
     private ActionConfig mActionConfig = new ActionConfig();
@@ -64,9 +63,7 @@ public class ViewAction {
         Fragment fragment = mAppChooser.getFragment();
         if (fragment != null) {
             mActionConfig.fromActivity = false;
-            FragmentManager fragmentManager =
-                    Preconditions.checkNotNull(fragment.getFragmentManager());
-            ViewFragment.newInstance(mActionConfig).show(fragmentManager,
+            ViewFragment.newInstance(mActionConfig).show(fragment.getParentFragmentManager(),
                     FRAGMENT_TAG);
             return;
         }

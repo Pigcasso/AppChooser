@@ -16,7 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.zhuliang.appchooser.BuildConfig;
+
+import io.zhuliang.appchooser.sample.BuildConfig;
 import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.SampleInjection;
@@ -51,8 +52,9 @@ public class FileInfosFragment extends Fragment implements FileInfosContract.Vie
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle arguments = Preconditions.checkNotNull(getArguments());
+        Bundle arguments = requireArguments();
         String absolutePath = arguments.getString(EXTRA_ABSOLUTE_PATH);
+        Preconditions.checkNotNull(absolutePath);
 
         if (TextUtils.isEmpty(absolutePath)) {
             throw new IllegalStateException("Absolute path is null");

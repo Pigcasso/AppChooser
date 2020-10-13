@@ -5,10 +5,9 @@ import android.content.Intent;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
+
 import io.zhuliang.appchooser.AppChooser;
 import io.zhuliang.appchooser.BuildConfig;
-import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.ui.send.SendFragment;
 import io.zhuliang.appchooser.util.MimeType;
 
@@ -18,7 +17,7 @@ import io.zhuliang.appchooser.util.MimeType;
 
 public class SendAction {
 
-    private static final String FRAGMENT_TAG = BuildConfig.APPLICATION_ID + ".fragment.tag.SEND";
+    private static final String FRAGMENT_TAG = BuildConfig.LIBRARY_PACKAGE_NAME + ".fragment.tag.SEND";
 
     private AppChooser mAppChooser;
     private ActionConfig mActionConfig = new ActionConfig();
@@ -53,9 +52,7 @@ public class SendAction {
         Fragment fragment = mAppChooser.getFragment();
         if (fragment != null) {
             mActionConfig.fromActivity = false;
-            FragmentManager fragmentManager =
-                    Preconditions.checkNotNull(fragment.getFragmentManager());
-            SendFragment.newInstance(mActionConfig).show(fragmentManager,
+            SendFragment.newInstance(mActionConfig).show(fragment.getParentFragmentManager(),
                     FRAGMENT_TAG);
             return;
         }

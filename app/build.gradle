@@ -24,16 +24,14 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':library')
-    testImplementation "junit:junit:$rootProject.ext.junitVersion"
-    testImplementation "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
-    androidTestImplementation "org.mockito:mockito-core:$rootProject.ext.mockitocoreVersion"
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0-alpha02', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    implementation 'androidx.appcompat:appcompat:1.2.0-alpha01'
-    implementation 'com.google.android.material:material:1.2.0-alpha02'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
-    implementation "io.reactivex:rxjava:$rootProject.ext.rxjava"
-    implementation "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
-    implementation "com.zhy:base-rvadapter:$rootProject.ext.baservadapterVersion"
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "org.mockito:mockito-core:$mockitocore_version"
+    androidTestImplementation "org.mockito:mockito-core:$mockitocore_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressocore_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation "io.reactivex:rxjava:$rxjava_version"
+    implementation "io.reactivex:rxandroid:$rxandroid_version"
+    implementation "com.zhy:base-rvadapter:$baservadapter_version"
 }

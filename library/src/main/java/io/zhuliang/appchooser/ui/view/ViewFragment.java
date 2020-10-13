@@ -56,7 +56,7 @@ import io.zhuliang.appchooser.util.ToastUtils;
 public class ViewFragment extends ResolveInfosFragment {
     private static final String TAG = "ViewFragment";
 
-    private static final String EXTRA_ACTION_CONFIG = BuildConfig.APPLICATION_ID + ".fragment.extra.ACTION_CONFIG";
+    private static final String EXTRA_ACTION_CONFIG = BuildConfig.LIBRARY_PACKAGE_NAME + ".fragment.extra.ACTION_CONFIG";
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
@@ -79,7 +79,7 @@ public class ViewFragment extends ResolveInfosFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        Bundle arguments = Preconditions.checkNotNull(getArguments());
+        Bundle arguments = requireArguments();
         ActionConfig actionConfig = arguments.getParcelable(EXTRA_ACTION_CONFIG);
         Preconditions.checkNotNull(actionConfig);
         File file = new File(actionConfig.pathname);
@@ -100,7 +100,7 @@ public class ViewFragment extends ResolveInfosFragment {
     @Override
     @SuppressLint("InflateParams")
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Context context = Preconditions.checkNotNull(getContext());
+        Context context = requireContext();
         View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_view, null);
         mRecyclerView = contentView.findViewById(R.id.recycler_view);
         mProgressBar = contentView.findViewById(R.id.progress_bar);
@@ -143,7 +143,7 @@ public class ViewFragment extends ResolveInfosFragment {
 
     @Override
     protected void showNoResolveInfos() {
-        Activity activity = Preconditions.checkNotNull(getActivity());
+        Activity activity = requireActivity();
         ToastUtils.showToast(activity, R.string.view_no_apps_can_open_this_file);
     }
 
@@ -188,7 +188,7 @@ public class ViewFragment extends ResolveInfosFragment {
         setLoadingIndicator(true);
         Intent intent = new Intent(mActionConfig.actionName);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Context context = Preconditions.checkNotNull(getContext());
+            Context context = requireContext();
             Uri uri = FileProvider.getUriForFile(context, mActionConfig.authority,
                     new File(mActionConfig.pathname));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -218,8 +218,8 @@ public class ViewFragment extends ResolveInfosFragment {
 
     private void showMediaTypes(List<MediaType> mediaTypes) {
         setCheckBoxIndicator(false);
-        Context context = Preconditions.checkNotNull(getContext());
-        CommonAdapter mediaTypesAdapter = new CommonAdapter<MediaType>(context, R.layout.item_media_type, mediaTypes) {
+        Context context = requireContext();
+        CommonAdapter<MediaType> mediaTypesAdapter = new CommonAdapter<MediaType>(context, R.layout.item_media_type, mediaTypes) {
             @Override
             protected void convert(ViewHolder holder, MediaType item, int position) {
                 holder.setText(R.id.text_view_media_type_name, item.getDisplayName());
@@ -252,7 +252,7 @@ public class ViewFragment extends ResolveInfosFragment {
 
     private Intent makeIntent(@NonNull ActivityInfo activityInfo) {
         Preconditions.checkNotNull(activityInfo);
-        Context context = Preconditions.checkNotNull(getContext());
+        Context context = requireContext();
         Intent intent = new Intent(mActionConfig.actionName);
         intent.setComponent(new ComponentName(activityInfo.getPkg(), activityInfo.getCls()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
