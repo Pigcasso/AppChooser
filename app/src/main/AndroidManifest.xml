@@ -26,6 +26,7 @@
         <activity
             android:name="io.zhuliang.appchooser.sample.module.share.ShareActivity"
             android:label="@string/share_title" />
+        <activity android:name=".module.mediastoreimages.MediaStoreImagesActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

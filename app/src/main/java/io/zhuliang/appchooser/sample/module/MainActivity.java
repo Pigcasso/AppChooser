@@ -1,12 +1,15 @@
 package io.zhuliang.appchooser.sample.module;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.View;
 
 import io.zhuliang.appchooser.sample.R;
 import io.zhuliang.appchooser.sample.module.fileinfos.FileInfosActivity;
+import io.zhuliang.appchooser.sample.module.mediastoreimages.MediaStoreImagesActivity;
 import io.zhuliang.appchooser.sample.module.share.ShareActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,5 +29,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void onActionSendClick(View view) {
         ShareActivity.start(this);
+    }
+
+    public void onActionEditClick(View view) {
+        MediaStoreImagesActivity.start(this);
     }
 }

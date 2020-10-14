@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,7 +13,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"/>
+            android:layout_height="?attr/actionBarSize" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
@@ -27,12 +26,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onActionViewClick"
-            android:text="Intent.ACTION_VIEW"/>
+            android:text="Intent.ACTION_VIEW" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onActionSendClick"
-            android:text="Intent.ACTION_SEND"/>
+            android:text="Intent.ACTION_SEND" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onActionEditClick"
+            android:text="Intent.ACTION_EDIT" />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

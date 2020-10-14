@@ -28,7 +28,7 @@ ext {
     versionName = "4.0.1"
 
     compileSdkVersion = 29
-    minSdkVersion = 17
+    minSdkVersion = 21
     targetSdkVersion = 29
 
     // Test Compile
@@ -45,4 +45,5 @@ ext {
     rxjava_version = '1.2.5'
     rxandroid_version = '1.2.1'
     baservadapter_version = '3.0.3'
+    glide_version = '4.11.0'
 }

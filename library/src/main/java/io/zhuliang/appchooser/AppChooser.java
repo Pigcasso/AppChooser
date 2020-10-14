@@ -1,5 +1,7 @@
 package io.zhuliang.appchooser;
 
+import android.net.Uri;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -7,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
+import io.zhuliang.appchooser.action.EditAction;
 import io.zhuliang.appchooser.action.SendAction;
 import io.zhuliang.appchooser.action.ViewAction;
 
@@ -46,6 +49,10 @@ public final class AppChooser {
 
     public ViewAction file(File file) {
         return new ViewAction(this).file(file);
+    }
+
+    public EditAction edit(Uri uri) {
+        return new EditAction(this).uri(uri);
     }
 
     @Nullable

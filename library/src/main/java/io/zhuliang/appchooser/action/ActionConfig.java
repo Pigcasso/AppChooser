@@ -2,6 +2,7 @@ package io.zhuliang.appchooser.action;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -15,6 +16,7 @@ public final class ActionConfig implements Parcelable {
 
     public String actionName;
     public String pathname;
+    public Uri uri;
     public int requestCode;
     public ComponentName[] excluded;
     public String mimeType;
@@ -37,6 +39,7 @@ public final class ActionConfig implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.actionName);
         dest.writeString(this.pathname);
+        dest.writeParcelable(uri, flags);
         dest.writeInt(this.requestCode);
         dest.writeTypedArray(this.excluded, flags);
         dest.writeString(this.mimeType);
