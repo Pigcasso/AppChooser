@@ -12,11 +12,12 @@
 
 ## 效果图
 
-![其他应用打开打开文件](screenshots/Gif_20171117_095658.gif)
-
-
-
-![分享文字到其他应用](screenshots/Gif_20171117_095855.gif)
+<table>
+<tr>
+  <td><img src="screenshots/Gif_20171117_095658.gif" alt="其他应用打开打开文件"/></td>
+  <td><img src="screenshots/Gif_20171117_095855.gif" alt="分享文字到其他应用"/></td>
+</tr>
+</table>
 
 ## 依赖
 
