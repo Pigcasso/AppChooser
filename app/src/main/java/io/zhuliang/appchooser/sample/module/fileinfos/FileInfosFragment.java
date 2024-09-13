@@ -25,7 +25,7 @@ import io.zhuliang.appchooser.ui.base.CommonAdapter;
 
 public class FileInfosFragment extends Fragment implements FileInfosContract.View {
 
-    private static final String EXTRA_ABSOLUTE_PATH = BuildConfig.APPLICATION_ID + ".extra.ABSOLUTE_PATH";
+    private static final String EXTRA_ABSOLUTE_PATH = BuildConfig.LIBRARY_PACKAGE_NAME + ".extra.ABSOLUTE_PATH";
     private FileInfosContract.Presenter mPresenter;
     private FileInfosAdapter mAdapter;
     private OnItemClickListener mOnItemClickListener;
@@ -51,7 +51,7 @@ public class FileInfosFragment extends Fragment implements FileInfosContract.Vie
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle arguments = Preconditions.checkNotNull(getArguments());
+        Bundle arguments = requireArguments();
         String absolutePath = arguments.getString(EXTRA_ABSOLUTE_PATH);
 
         if (TextUtils.isEmpty(absolutePath)) {

@@ -9,9 +9,7 @@ import org.mockito.MockitoAnnotations;
 import io.zhuliang.appchooser.sample.data.FileInfo;
 import io.zhuliang.appchooser.sample.data.FileInfosDataSource;
 import io.zhuliang.appchooser.sample.data.FileInfosRepository;
-import io.julian.mvp.util.schedulers.ImmediateSchedulerProvider;
-import io.zhuliang.appchooser.sample.module.fileinfos.FileInfosContract;
-import io.zhuliang.appchooser.sample.module.fileinfos.FileInfosPresenter;
+import io.zhuliang.appchooser.sample.util.schedulers.ImmediateSchedulerProvider;
 import rx.Observable;
 
 /**

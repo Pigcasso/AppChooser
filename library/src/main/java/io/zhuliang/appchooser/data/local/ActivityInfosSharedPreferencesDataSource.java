@@ -21,7 +21,7 @@ import static io.zhuliang.appchooser.internal.Preconditions.checkNotNull;
 
 public class ActivityInfosSharedPreferencesDataSource implements ActivityInfosDataSource {
 
-    private static final String SP_NAME = BuildConfig.APPLICATION_ID + "_preferences";
+    private static final String SP_NAME = BuildConfig.LIBRARY_PACKAGE_NAME + "_preferences";
 
     private SharedPreferences mPreferences;
 

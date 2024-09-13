@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import java.io.File;
 
 import io.zhuliang.appchooser.sample.constant.FileConsts;
-import io.julian.mvp.util.schedulers.ImmediateSchedulerProvider;
+import io.zhuliang.appchooser.sample.util.schedulers.ImmediateSchedulerProvider;
 
 /**
  * @author Zhu Liang

@@ -40,7 +40,7 @@ import io.zhuliang.appchooser.util.ToastUtils;
 
 public class SendFragment extends ResolveInfosFragment {
     private static final String TAG = "SendFragment";
-    static final String EXTRA_ACTION_CONFIG = BuildConfig.APPLICATION_ID + ".fragment.extra.ACTION_CONFIG";
+    static final String EXTRA_ACTION_CONFIG = BuildConfig.LIBRARY_PACKAGE_NAME + ".fragment.extra.ACTION_CONFIG";
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
@@ -59,7 +59,7 @@ public class SendFragment extends ResolveInfosFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mResolveInfosRepository = Injection.provideResolveInfosRepository(context);
-        Bundle arguments = Preconditions.checkNotNull(getArguments());
+        Bundle arguments = requireArguments();
         ActionConfig actionConfig = arguments.getParcelable(EXTRA_ACTION_CONFIG);
         Preconditions.checkNotNull(actionConfig);
         mActionConfig = Preconditions.checkNotNull(actionConfig);
@@ -115,7 +115,7 @@ public class SendFragment extends ResolveInfosFragment {
 
     @Override
     protected void showNoResolveInfos() {
-        Activity activity = Preconditions.checkNotNull(getActivity());
+        Activity activity = requireActivity();
         ToastUtils.showToast(activity, R.string.send_no_apps_can_share_text);
     }
 

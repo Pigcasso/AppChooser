@@ -21,7 +21,7 @@ import io.zhuliang.appchooser.util.FileUtils;
 
 public class ViewAction {
 
-    private static final String FRAGMENT_TAG = BuildConfig.APPLICATION_ID + ".fragment.tag.VIEW";
+    private static final String FRAGMENT_TAG = BuildConfig.LIBRARY_PACKAGE_NAME + ".fragment.tag.VIEW";
 
     private AppChooser mAppChooser;
     private ActionConfig mActionConfig = new ActionConfig();

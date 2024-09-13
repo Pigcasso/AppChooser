@@ -10,17 +10,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.google.android.material.tabs.TabLayout;
-
-import java.io.File;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
@@ -31,6 +23,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.tabs.TabLayout;
+
+import java.io.File;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import io.zhuliang.appchooser.AppChooser;
 import io.zhuliang.appchooser.internal.Preconditions;
 import io.zhuliang.appchooser.sample.BuildConfig;
@@ -41,7 +43,7 @@ import io.zhuliang.appchooser.util.Logger;
 public class FileInfosActivity extends AppCompatActivity implements FileInfosFragment.OnItemClickListener {
     private static final String TAG = FileInfosActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 110;
-    private static final String EXTRA_SELECTED_DIRECTORy = "extra_selected_directory";
+    private static final String EXTRA_SELECTED_DIRECTORY = "extra_selected_directory";
     private static final String EXTRA_DIRECTORIES = "extra_directories";
 
     private static final int OPERATION_NONE = 0;
@@ -50,6 +52,7 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
     private static final int OPERATION_CLICK_ITEM = 3;
 
     private static final int REQUEST_CODE_OPEN_FILE = 10;
+    private static final int REQUEST_CODE_MANAGE_EXTERNAL_STORAGE = 11;
 
     @IntDef(value = {OPERATION_NONE, OPERATION_BACK_PRESSED, OPERATION_SELECTED_TAB,
             OPERATION_CLICK_ITEM})
@@ -60,8 +63,6 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
 //    private AppChooser mAppChooser;
 
     ComponentName[] excluded = new ComponentName[]{
-            new ComponentName("nutstore.android", "nutstore.android.SendToNutstoreIndex"),
-            new ComponentName("nutstore.android.debug", "nutstore.android.SendToNutstoreIndex"),
     };
 
     private ArrayList<FileInfo> mDirectories = new ArrayList<>();
@@ -102,7 +103,7 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
 
         if (savedInstanceState != null) {
             mDirectories = savedInstanceState.getParcelableArrayList(EXTRA_DIRECTORIES);
-            mSelectedDirectory = savedInstanceState.getParcelable(EXTRA_SELECTED_DIRECTORy);
+            mSelectedDirectory = savedInstanceState.getParcelable(EXTRA_SELECTED_DIRECTORY);
         }
 
         mMyHandler = new MyHandler(this);
@@ -124,7 +125,14 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
 
 //        mAppChooser = AppChooser.with(this).excluded(excluded);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                startActivityForResult(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION),
+                        REQUEST_CODE_MANAGE_EXTERNAL_STORAGE);
+            } else {
+                showDirectory(null, OPERATION_NONE);
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -149,7 +157,7 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(EXTRA_DIRECTORIES, mDirectories);
-        outState.putParcelable(EXTRA_SELECTED_DIRECTORy, mSelectedDirectory);
+        outState.putParcelable(EXTRA_SELECTED_DIRECTORY, mSelectedDirectory);
     }
 
     @Override
@@ -170,6 +178,12 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_OPEN_FILE) {
             Logger.d(TAG, "onActivityResult: " + requestCode + "," + resultCode + "," + data);
+        } else if (requestCode == REQUEST_CODE_MANAGE_EXTERNAL_STORAGE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    showDirectory(null, OPERATION_NONE);
+                }
+            }
         }
     }
 
@@ -181,10 +195,9 @@ public class FileInfosActivity extends AppCompatActivity implements FileInfosFra
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_file_infos_clear_defaults:
-                AppChooser.from(this).cleanDefaults();
-                return true;
+        if (item.getItemId() == R.id.menu_file_infos_clear_defaults) {
+            AppChooser.from(this).cleanDefaults();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
