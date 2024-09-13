@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    `maven-publish`
 }
 
 android {
@@ -43,4 +44,19 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+// https://developer.android.com/build/publish-library
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "io.zhuliang"
+            artifactId = "appchooser"
+            version = libs.versions.versionName.get()
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
