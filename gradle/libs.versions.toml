@@ -15,8 +15,8 @@ rxandroid = "1.2.1"
 targetSdk = "34"
 compileSdk = "34"
 minSdk = "21"
-versionCode = "16"
-versionName = "4.0.2"
+versionCode = "17"
+versionName = "4.0.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
